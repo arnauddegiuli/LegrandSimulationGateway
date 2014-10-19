@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.homesnap.legrand.gateway.simulation</groupId>
-	<artifactId>server</artifactId>
+	<artifactId>project</artifactId>
 	<name>HomeSnap Legrand Simulation Gateway</name>
         <version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
