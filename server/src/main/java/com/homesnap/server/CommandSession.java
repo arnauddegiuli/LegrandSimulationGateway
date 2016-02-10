@@ -28,10 +28,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.List;
 
 import com.homesnap.engine.Log;
 import com.homesnap.engine.Log.Session;
-import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetCommand;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
 
@@ -108,19 +108,21 @@ public class CommandSession implements Runnable {
 				fini = true;
 			}
 			else {
-				String result = OpenWebNetConstant.NACK;
 				try {
 					OpenWebNetCommand parser = new OpenWebNetCommand(lue);
 					if (parser.isStandardCommand() || parser.isDimensionCommand()) {
-						result = ControllerStateManagement.executeCommand(lue);
+						write(ControllerStateManagement.executeCommand(lue));
 					} else {
-						result = ControllerStateManagement.executeStatus(lue);
+						List<String> result = ControllerStateManagement.executeStatus(lue);
+						for (String string : result) {
+							write(string);
+						}
 					}	
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				write(result);
+				
 			}
 		}
 		stop();

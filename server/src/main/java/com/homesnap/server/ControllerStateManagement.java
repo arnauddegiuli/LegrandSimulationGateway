@@ -100,35 +100,35 @@ public class ControllerStateManagement {
 			ControllerSimulator cc;
 			synchronized (controllerCommandList) {
 				synchronized (controllerDimensionCommandList) {
-				cc = controllerCommandList.get(who);
-			
-			if (cc != null) {
-				result = cc.execute(command);
-			} else {
+					cc = controllerCommandList.get(who);
 				
-					ControllerDimensionSimulator cdc = controllerDimensionCommandList.get(who);
-					if (cdc != null) {
-						result = cdc.execute(command);
+					if (cc != null) {
+						result = cc.execute(command);
 					} else {
-						System.out.println("Command not supported [" + command + "]");
-						result = OpenWebNetConstant.NACK;
+						
+							ControllerDimensionSimulator cdc = controllerDimensionCommandList.get(who);
+							if (cdc != null) {
+								result = cdc.execute(command);
+							} else {
+								System.out.println("Command not supported [" + command + "]");
+								result = OpenWebNetConstant.NACK;
+							}
 					}
-				
-			}
-			
-			if (!OpenWebNetConstant.NACK.equalsIgnoreCase(result)) {
-				synchronized (monitorList) {
-					// Monitor session closed is only detected when we try to lunch a command on it
-					// So, here we clone the monitor list since in monitor(command) method, if monitor session has been closed,
-					// it is removed from the monitorList => cause a concurrent modification not prevented by the lock because we
-					// are in the same thread...
-					List<MonitorSession> monitorList2 = new ArrayList<MonitorSession>(monitorList);
-					for (MonitorSession monitor : monitorList2) {
-						monitor.monitor(command);
+		
+					if (!OpenWebNetConstant.NACK.equalsIgnoreCase(result)) {
+						synchronized (monitorList) {
+							// Monitor session closed is only detected when we try to lunch a command on it
+							// So, here we clone the monitor list since in monitor(command) method, if monitor session has been closed,
+							// it is removed from the monitorList => cause a concurrent modification not prevented by the lock because we
+							// are in the same thread...
+							List<MonitorSession> monitorList2 = new ArrayList<MonitorSession>(monitorList);
+							for (MonitorSession monitor : monitorList2) {
+								monitor.monitor(command);
+							}
+						}
 					}
 				}
 			}
-			}}
 			return result;
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -142,12 +142,12 @@ public class ControllerStateManagement {
 	 * @param command the status request to execute
 	 * @return the status
 	 */
-	public synchronized static String executeStatus(String command) {
+	public synchronized static List<String> executeStatus(String command) {
 		try {
 			CommandParser parser = CommandParser.parse(command);
 			String who = parser.getWho();
 			ControllerSimulator cc;
-			
+
 			synchronized (controllerCommandList) {
 				synchronized (controllerDimensionCommandList) {
 				cc = controllerCommandList.get(who);
@@ -161,14 +161,18 @@ public class ControllerStateManagement {
 						return cdc.status(command);
 					} else {
 						System.out.println("Command not supported [" + command + "]");
-						return OpenWebNetConstant.NACK;
+						List<String> result = new ArrayList<String>();
+						result.add(OpenWebNetConstant.NACK);
+						return result;
 					}
 				}
 			}}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+			List<String> result = new ArrayList<String>();
+			result.add(OpenWebNetConstant.NACK);
+			return result;
 		}
 	}
 	

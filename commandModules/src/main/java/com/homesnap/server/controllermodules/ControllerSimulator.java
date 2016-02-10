@@ -1,5 +1,7 @@
 package com.homesnap.server.controllermodules;
 
+import java.util.List;
+
 /*
  * #%L
  * HomeSnap Legrand Simulation Gateway Interfaces
@@ -27,6 +29,6 @@ package com.homesnap.server.controllermodules;
 public interface ControllerSimulator {
 
 	public String execute(String command);
-	public String status(String command);
+	public List<String> status(String command);
 	public String getWho();
 }
