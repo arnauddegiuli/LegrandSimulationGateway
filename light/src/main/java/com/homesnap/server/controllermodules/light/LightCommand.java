@@ -37,10 +37,10 @@ public class LightCommand {
 	static final String[] functions = { "on", "off" };
 	
 	public String on(String address) {
-		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_LIGHTING, LightStatusConverter.LIGHT_ON.getCode(), address} ));
+		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_LIGHTING.getValue(), LightStatusConverter.LIGHT_ON.getCode(), address} ));
 	}
 	
 	public String off(String address) {
-		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_LIGHTING, LightStatusConverter.LIGHT_OFF.getCode(), address} ));
+		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {OpenWebNetWho.WHO_LIGHTING.getValue(), LightStatusConverter.LIGHT_OFF.getCode(), address} ));
 	}
 }
