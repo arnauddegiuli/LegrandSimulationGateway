@@ -153,7 +153,24 @@ public class ControllerStateManagement {
 				cc = controllerCommandList.get(who);
 			
 			if (cc != null) {
-				return cc.status(command);
+				List<String> result = cc.status(command);
+				if (!result.isEmpty()){				
+					synchronized (monitorList) {
+						// Monitor session closed is only detected when we try to lunch a command on it
+						// So, here we clone the monitor list since in monitor(command) method, if monitor session has been closed,
+						// it is removed from the monitorList => cause a concurrent modification not prevented by the lock because we
+						// are in the same thread...
+						List<MonitorSession> monitorList2 = new ArrayList<MonitorSession>(monitorList);
+						for (MonitorSession monitor : monitorList2) {
+							for (String c : result) {
+								if (!OpenWebNetConstant.NACK.equalsIgnoreCase(c)) {
+									monitor.monitor(c);
+								}
+							}
+						}
+					}
+				}
+				return result;
 			} else {
 				
 					ControllerDimensionSimulator cdc = controllerDimensionCommandList.get(who);
