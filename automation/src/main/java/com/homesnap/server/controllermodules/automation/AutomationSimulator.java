@@ -25,9 +25,12 @@ package com.homesnap.server.controllermodules.automation;
 
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
+import com.homesnap.engine.connector.openwebnet.WhereType;
 import com.homesnap.engine.connector.openwebnet.automation.AutomationStatusConverter;
 import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetWho;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
@@ -42,41 +45,96 @@ public class AutomationSimulator implements ControllerSimulator {
 	public String execute(String command) {
 		try {
 			CommandParser parser = CommandParser.parse(command);
-			String what = parser.getWhat();
-			String where = parser.getWhere();
-			if (AutomationStatusConverter.AUTOMATION_DOWN.getCode().equals(what)
-					|| AutomationStatusConverter.AUTOMATION_STOP.getCode().equals(what)
-					|| AutomationStatusConverter.AUTOMATION_UP.getCode().equals(what)) {
-				statusList.put(where, what);
-				return OpenWebNetConstant.ACK;
+
+			if (WhereType.GENERAL == parser.getWhereType()) {
+				// We send command to all correct address
+				for (int i = 11; i < 99; i++) {
+					if (i % 10 != 0) { // group address (20, 30, ..) are not correct
+						updateController(""+i, parser.getWhat());
+					}
+				}
+			} else if (WhereType.GROUP == parser.getWhereType()) {
+				// We send command to group address
+				// Not supported actually...
+			} else if (WhereType.ENVIRONMENT == parser.getWhereType()) {
+				String environment = parser.getEnvironment();
+				// We send ambiance command to address
+				for (int i = 1; i < 9; i++) {
+					updateController(environment + i, parser.getWhat());
+				}
 			} else {
-				System.out.println("Command not supported [" + command + "]");
-				return OpenWebNetConstant.NACK;
+				// Command direct on a controller
+				updateController(parser.getWhere(), parser.getWhat());
 			}
+			
+			return OpenWebNetConstant.ACK;
+
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
+			System.out.println("Command not supported [" + command + "]");
+			return OpenWebNetConstant.NACK;
+		} catch (UnsupportedOperationException e) {
+			System.out.println("Command not supported [" + command + "]");
+			return OpenWebNetConstant.NACK;
 		}
 	}
 	
+	private void updateController(String where, String what) {
+		if (AutomationStatusConverter.AUTOMATION_DOWN.getCode().equals(what)
+				|| AutomationStatusConverter.AUTOMATION_STOP.getCode().equals(what)
+				|| AutomationStatusConverter.AUTOMATION_UP.getCode().equals(what)) {
+			statusList.put(where, what);
+			
+		} else {
+			throw new UnsupportedOperationException("Command not supported [" + where + ":" + what +  "]");
+		}
+		
+	}
+	
 	@Override
-	public String status(String command) {
-		String where;
+	public List<String> status(String command) {
+		List<String> result = new ArrayList<String>();
 		try {
-			where = CommandParser.parse(command).getWhere();
-			String what = statusList.get(where);
-			if (what == null) {
-				what = AutomationStatusConverter.AUTOMATION_STOP.getCode();
-				statusList.put(where, what);
+			CommandParser parser = CommandParser.parse(command);
+			String where = parser.getWhere();
+			
+			
+			if (WhereType.GENERAL == parser.getWhereType()) {
+				// We send command to all correct address
+				for (int i = 11; i < 100; i++) {
+					if (i % 10 != 0) { // group address (20, 30, ..) are not correct
+						result.add(updateStatus(""+i));
+					}
+				}
+			} else if (WhereType.GROUP == parser.getWhereType()) {
+				// We send command to group address
+				// Not supported actually...
+			} else if (WhereType.ENVIRONMENT == parser.getWhereType()) {
+				String environment = parser.getEnvironment();
+				// We send ambiance command to address
+				for (int i = 1; i < 10; i++) {
+					result.add(updateStatus(environment + i));
+				}
+			} else {
+				// Command direct on a controller
+				result.add(updateStatus(where));
 			}
 
-			return MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {getWho(), what, where} ) + OpenWebNetConstant.ACK;
+			result.add(OpenWebNetConstant.ACK);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+				// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+			result.add(OpenWebNetConstant.NACK);
 		}
+		return result;
+	}
+	
+	private String updateStatus(String where) {
+		String what = statusList.get(where);
+		if (what == null) {
+			what = AutomationStatusConverter.AUTOMATION_STOP.getCode();
+			statusList.put(where, what);
+		}
+		return MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {getWho(), what, where} );
 		
 	}
 
