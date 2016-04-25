@@ -30,7 +30,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
-import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetWho;
+import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetConverterRegistry;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneDimension;
 import com.homesnap.engine.connector.openwebnet.heating.ValveStatusEnum;
@@ -145,6 +145,6 @@ public class HeatingSimulator implements ControllerDimensionSimulator {
 
 	@Override
 	public String getWho() {
-		return OpenWebNetWho.WHO_HEATING_ADJUSTMENT.getValue();
+		return OpenWebNetConverterRegistry.WHO_HEATING_ADJUSTMENT.getValue();
 	}	
 }

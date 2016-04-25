@@ -31,7 +31,6 @@ import java.util.List;
 
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.WhereType;
-import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetWho;
 import com.homesnap.engine.connector.openwebnet.light.LightStatusConverter;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
@@ -79,8 +78,8 @@ public class LightSimulator implements ControllerSimulator {
 	}
 	
 	private void updateController(String where, String what) {
-		if (LightStatusConverter.LIGHT_OFF.getCode().equals(what)
-				|| LightStatusConverter.LIGHT_ON.getCode().equals(what)) {
+		if (LightStatusConverter.LightStatus.LIGHT_OFF.getCode().equals(what)
+				|| LightStatusConverter.LightStatus.LIGHT_ON.getCode().equals(what)) {
 			statusList.put(where, what);
 			
 		} else {
@@ -130,7 +129,7 @@ public class LightSimulator implements ControllerSimulator {
 	private String updateStatus(String where) {
 		String what = statusList.get(where);
 		if (what == null) {
-			what = LightStatusConverter.LIGHT_OFF.getCode();
+			what = LightStatusConverter.LightStatus.LIGHT_OFF.getCode();
 			statusList.put(where, what);
 		}
 		return MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {getWho(), what, where} );
@@ -139,6 +138,6 @@ public class LightSimulator implements ControllerSimulator {
 
 	@Override
 	public String getWho() {
-		return OpenWebNetWho.WHO_LIGHTING.getValue();
+		return new LightStatusConverter().getOpenWebWho();
 	}
 }

@@ -35,7 +35,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
-import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetWho;
+import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetConverterRegistry;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
 import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimensionConverter;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.DateTime;
@@ -211,7 +211,7 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 
 	@Override
 	public String getWho() {
-		return OpenWebNetWho.WHO_GATEWAY.getValue();
+		return OpenWebNetConverterRegistry.WHO_GATEWAY.getValue();
 	}
 	
 	private InetAddress getIp() {

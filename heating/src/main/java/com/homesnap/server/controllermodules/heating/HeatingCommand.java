@@ -28,11 +28,8 @@ import java.text.MessageFormat;
 import java.util.List;
 
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
-import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetWho;
+import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetConverterRegistry;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
-import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneDimension;
-import com.homesnap.engine.connector.openwebnet.heating.dimension.DesiredTemperature;
-import com.homesnap.engine.connector.openwebnet.heating.dimension.MeasureTemperature;
 import com.homesnap.server.ControllerStateManagement;
 
 public class HeatingCommand {
@@ -52,7 +49,7 @@ public class HeatingCommand {
 		DesiredTemperature dt = new DesiredTemperature();
 		dt.setDesiredTemperature(temperature);
 		dt.setMode(1);
-		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {OpenWebNetWho.WHO_HEATING_ADJUSTMENT, address, HeatingZoneDimension.SET_TEMPERATURE, formatDimension(dt.getValueList())}));
+		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {OpenWebNetConverterRegistry.WHO_HEATING_ADJUSTMENT, address, HeatingZoneDimension.SET_TEMPERATURE, formatDimension(dt.getValueList())}));
 	}
 	
 	/**
@@ -65,7 +62,7 @@ public class HeatingCommand {
 	public String currentTemperature(double temperature, String address) {
 		MeasureTemperature dt = new MeasureTemperature();
 		dt.setMeasuredTemperature(temperature);
-		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {OpenWebNetWho.WHO_HEATING_ADJUSTMENT, address, HeatingZoneDimension.MEASURE_TEMPERATURE.getCode(), formatDimension(dt.getValueList())}));
+		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {OpenWebNetConverterRegistry.WHO_HEATING_ADJUSTMENT, address, HeatingZoneDimension.MEASURE_TEMPERATURE.getCode(), formatDimension(dt.getValueList())}));
 	}
 	
 	private String formatDimension(List<DimensionValue> valueList) {

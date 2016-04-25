@@ -32,7 +32,7 @@ import java.util.List;
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.WhereType;
 import com.homesnap.engine.connector.openwebnet.automation.AutomationStatusConverter;
-import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetWho;
+import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetConverterRegistry;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
 import com.homesnap.server.controllermodules.ControllerSimulator;
@@ -140,6 +140,6 @@ public class AutomationSimulator implements ControllerSimulator {
 
 	@Override
 	public String getWho() {
-		return OpenWebNetWho.WHO_AUTOMATION.getValue();
+		return OpenWebNetConverterRegistry.WHO_AUTOMATION.getValue();
 	}
 }
