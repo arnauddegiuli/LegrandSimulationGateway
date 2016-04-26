@@ -32,7 +32,6 @@ import java.util.List;
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.WhereType;
 import com.homesnap.engine.connector.openwebnet.automation.AutomationStatusConverter;
-import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetConverterRegistry;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
 import com.homesnap.server.controllermodules.ControllerSimulator;
@@ -79,9 +78,9 @@ public class AutomationSimulator implements ControllerSimulator {
 	}
 	
 	private void updateController(String where, String what) {
-		if (AutomationStatusConverter.AUTOMATION_DOWN.getCode().equals(what)
-				|| AutomationStatusConverter.AUTOMATION_STOP.getCode().equals(what)
-				|| AutomationStatusConverter.AUTOMATION_UP.getCode().equals(what)) {
+		if (AutomationStatusConverter.AutomationStatus.AUTOMATION_DOWN.getCode().equals(what)
+				|| AutomationStatusConverter.AutomationStatus.AUTOMATION_STOP.getCode().equals(what)
+				|| AutomationStatusConverter.AutomationStatus.AUTOMATION_UP.getCode().equals(what)) {
 			statusList.put(where, what);
 			
 		} else {
@@ -131,7 +130,7 @@ public class AutomationSimulator implements ControllerSimulator {
 	private String updateStatus(String where) {
 		String what = statusList.get(where);
 		if (what == null) {
-			what = AutomationStatusConverter.AUTOMATION_STOP.getCode();
+			what = AutomationStatusConverter.AutomationStatus.AUTOMATION_STOP.getCode();
 			statusList.put(where, what);
 		}
 		return MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {getWho(), what, where} );
@@ -140,6 +139,6 @@ public class AutomationSimulator implements ControllerSimulator {
 
 	@Override
 	public String getWho() {
-		return OpenWebNetConverterRegistry.WHO_AUTOMATION.getValue();
+		return new AutomationStatusConverter().getOpenWebWho();
 	}
 }
