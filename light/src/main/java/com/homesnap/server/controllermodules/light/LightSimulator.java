@@ -1,5 +1,7 @@
 package com.homesnap.server.controllermodules.light;
 
+import java.io.File;
+
 /*
  * #%L
  * HomeSnap Legrand Simulation Gateway LightModule
@@ -26,8 +28,8 @@ package com.homesnap.server.controllermodules.light;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
+import java.util.MissingResourceException;
 
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.WhereType;
@@ -35,10 +37,11 @@ import com.homesnap.engine.connector.openwebnet.light.LightStatusConverter;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
 import com.homesnap.server.controllermodules.ControllerSimulator;
+import com.homesnap.server.controllermodules.StatusManager;
 
 public class LightSimulator implements ControllerSimulator {
 	
-	private static Hashtable<String, String> statusList = new Hashtable<String, String>(); // where, what
+	private static StatusManager statusList = new StatusManager(new File("light.properties")); // where, what
 	
 	@Override
 	public String execute(String command) {
@@ -74,10 +77,17 @@ public class LightSimulator implements ControllerSimulator {
 		} catch (UnsupportedOperationException e) {
 			System.out.println("Command not supported [" + command + "]");
 			return OpenWebNetConstant.NACK;
+		} catch (MissingResourceException e) {
+			System.out.println("Device doesn't exist [" + command + "]");
+			return OpenWebNetConstant.NACK;
 		}
 	}
 	
 	private void updateController(String where, String what) {
+		if (statusList.containsKey(where)) {
+			throw new MissingResourceException("Device don't exist [" + where + ":" + what +  "]", what, where);
+		}
+		
 		if (LightStatusConverter.LightStatus.LIGHT_OFF.getCode().equals(what)
 				|| LightStatusConverter.LightStatus.LIGHT_ON.getCode().equals(what)) {
 			statusList.put(where, what);
@@ -100,7 +110,10 @@ public class LightSimulator implements ControllerSimulator {
 				// We send command to all correct address
 				for (int i = 11; i < 100; i++) {
 					if (i % 10 != 0) { // group address (20, 30, ..) are not correct
-						result.add(updateStatus(""+i));
+						String status = updateStatus(""+i);
+						if (status != null) {
+							result.add(status);
+						}
 					}
 				}
 			} else if (WhereType.GROUP == parser.getWhereType()) {
@@ -110,11 +123,17 @@ public class LightSimulator implements ControllerSimulator {
 				String environment = parser.getEnvironment();
 				// We send ambiance command to address
 				for (int i = 1; i < 10; i++) {
-					result.add(updateStatus(environment + i));
+					String status = updateStatus(environment+i);
+					if (status != null) {
+						result.add(status);
+					}
 				}
 			} else {
 				// Command direct on a controller
-				result.add(updateStatus(where));
+				String status = updateStatus(where);
+				if (status != null) {
+					result.add(status);
+				}
 			}
 
 			result.add(OpenWebNetConstant.ACK);
@@ -128,12 +147,7 @@ public class LightSimulator implements ControllerSimulator {
 	
 	private String updateStatus(String where) {
 		String what = statusList.get(where);
-		if (what == null) {
-			what = LightStatusConverter.LightStatus.LIGHT_OFF.getCode();
-			statusList.put(where, what);
-		}
-		return MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {getWho(), what, where} );
-		
+		return what == null ? null : MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {getWho(), what, where} );
 	}
 
 	@Override
