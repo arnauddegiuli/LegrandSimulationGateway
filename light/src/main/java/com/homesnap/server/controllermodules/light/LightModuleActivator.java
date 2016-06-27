@@ -31,21 +31,22 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 import com.homesnap.server.ControllerStateManagement;
+import com.homesnap.server.controllermodules.StatusManager;
 
 public class LightModuleActivator implements BundleActivator {
 
-	private LightSimulator lightModule = new LightSimulator();
+	private LightSimulator lightModule;
 	
 	@Override
 	public void start(BundleContext context) throws Exception {
+		
+		lightModule = new LightSimulator(new StatusManager(context.getBundle().getResource("light.properties").openConnection().getInputStream()));
 		
 		Dictionary<String, Object> dict = new Hashtable<String, Object>();
 		dict.put("osgi.command.scope", "light");
 		dict.put("osgi.command.function", LightCommand.functions);
 
-		
 		context.registerService(LightCommand.class.getName(), new LightCommand(), dict);
-		
 		
 		ControllerStateManagement.registerControllerCommand(lightModule);
 	}

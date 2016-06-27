@@ -1,7 +1,5 @@
 package com.homesnap.server.controllermodules.light;
 
-import java.io.File;
-
 /*
  * #%L
  * HomeSnap Legrand Simulation Gateway LightModule
@@ -41,7 +39,15 @@ import com.homesnap.server.controllermodules.StatusManager;
 
 public class LightSimulator implements ControllerSimulator {
 	
-	private static StatusManager statusList = new StatusManager(new File("light.properties")); // where, what
+	private static StatusManager statusList;
+
+	public LightSimulator(StatusManager sm) {
+		statusList = sm;
+	}
+	
+	public static void setStatusManager(StatusManager statusList) {
+		LightSimulator.statusList = statusList;
+	}
 	
 	@Override
 	public String execute(String command) {
@@ -84,7 +90,7 @@ public class LightSimulator implements ControllerSimulator {
 	}
 	
 	private void updateController(String where, String what) {
-		if (statusList.containsKey(where)) {
+		if (!statusList.containsKey(where)) {
 			throw new MissingResourceException("Device don't exist [" + where + ":" + what +  "]", what, where);
 		}
 		

@@ -1,9 +1,8 @@
 package com.homesnap.server.controllermodules;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Map;
@@ -14,14 +13,14 @@ public class StatusManager implements Map<String,String> {
 
 	private static Hashtable<String, String> statusList = new Hashtable<String, String>(); // where, what
 	
-	public StatusManager(File file) {
-		read(file);
+	public StatusManager(InputStream is) {
+		read(is);
 	}
 	
-	public void read(File f) {
+	public void read(InputStream f) {
 		Properties p = new Properties();
 		try {
-			p.load(new FileInputStream(f));
+			p.load(f);
 			for (String key : p.stringPropertyNames()) {
 				statusList.put(key, p.getProperty(key));
 			} 			

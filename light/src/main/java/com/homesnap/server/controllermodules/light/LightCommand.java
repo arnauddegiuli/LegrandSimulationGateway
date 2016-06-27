@@ -1,5 +1,8 @@
 package com.homesnap.server.controllermodules.light;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 /*
  * #%L
  * HomeSnap Legrand Simulation Gateway LightModule
@@ -29,11 +32,12 @@ import java.text.MessageFormat;
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.light.LightStatusConverter;
 import com.homesnap.server.ControllerStateManagement;
+import com.homesnap.server.controllermodules.StatusManager;
 
 public class LightCommand {
 	
 	// OSGi Shell Function
-	static final String[] functions = { "on", "off" };
+	static final String[] functions = { "on", "off", "loadConfiguration"};
 	
 	public String on(String address) {
 		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {new LightStatusConverter().getOpenWebWho(), LightStatusConverter.LightStatus.LIGHT_ON.getCode(), address} ));
@@ -41,5 +45,17 @@ public class LightCommand {
 	
 	public String off(String address) {
 		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {new LightStatusConverter().getOpenWebWho(), LightStatusConverter.LightStatus.LIGHT_OFF.getCode(), address} ));
+	}
+	
+	public String loadConfiguration(String file) {
+		try {
+			FileInputStream fis = new FileInputStream(file);
+			LightSimulator.setStatusManager(new StatusManager(fis));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return "Load failed.";
+		}
+		
+		return "Load done (at least file exist...).";
 	}
 }
