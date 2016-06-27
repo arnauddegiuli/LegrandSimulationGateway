@@ -33,11 +33,6 @@ public class MyDomoServerActivator implements BundleActivator {
 	@Override
 	public void start(BundleContext arg0) throws Exception {
 		server = new Server();
-		
-//		// TODO remove this thing... later will be loaded by bundle!
-//		ControllerStateManagement.registerControllerCommand(new LightCommand());
-//		ControllerStateManagement.registerControllerDimensionCommand(new GatewayCommand());
-		
 		server.start();
 		
 	}

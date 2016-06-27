@@ -35,9 +35,8 @@ import java.util.Hashtable;
 import java.util.List;
 
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
-import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetConverterRegistry;
 import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
-import com.homesnap.engine.connector.openwebnet.gateway.GatewayDimensionConverter;
+import com.homesnap.engine.connector.openwebnet.gateway.GatewayStatusConverter;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.DateTime;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.DistributionVersion;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.FirmwareVersion;
@@ -47,12 +46,10 @@ import com.homesnap.engine.connector.openwebnet.gateway.dimension.Model;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.Time;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
-
 import com.homesnap.server.controllermodules.ControllerDimensionSimulator;
 
 public class GatewaySimulator implements ControllerDimensionSimulator {
 
-	
 	private static final String GATEWAY_ADDRESS = "1";
 	private static Hashtable<String, List<DimensionValue>> dimensionCache = new Hashtable<String, List<DimensionValue>>(); // where-dimension, dimensionList
 	
@@ -62,21 +59,21 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 			CommandParser parser = CommandParser.parse(command);
 			String what = parser.getDimension();
 
-			if (GatewayDimensionConverter.TIME.getCode().equals(what)) {
+			if (GatewayStatusConverter.GatewayDimension.TIME.getCode().equals(what)) {
 				// define time... nothing to do except if you want change your
 				// system hours
 				return OpenWebNetConstant.ACK;
-			} else if (GatewayDimensionConverter.DATE.getCode().equals(
+			} else if (GatewayStatusConverter.GatewayDimension.DATE.getCode().equals(
 					what)) {
 				// define date... nothing to do except if you want change your
 				// system hours
 				return OpenWebNetConstant.ACK;
-			} else if (GatewayDimensionConverter.DATETIME.getCode().equals(
+			} else if (GatewayStatusConverter.GatewayDimension.DATETIME.getCode().equals(
 					what)) {
 				// define date... nothing to do except if you want change your
 				// system hours
 				return OpenWebNetConstant.ACK;
-			} else if (GatewayDimensionConverter.IP_ADDRESS.getCode().equals(
+			} else if (GatewayStatusConverter.GatewayDimension.IP_ADDRESS.getCode().equals(
 					what)) {
 				String where = GATEWAY_ADDRESS; // Gateway has no address! => can only manage connected gateway
 				String dimension = parser.getDimension();
@@ -95,123 +92,17 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 	}
 
 	@Override
-	public String status(String command) {
-		try {
-			String where = GATEWAY_ADDRESS;
-			CommandParser parser = CommandParser.parse(command);
-			String dimensionStr = parser.getDimension();
-			List<DimensionValue> dimensionList;
-			if (GatewayDimensionConverter.TIME.getCode().equals(dimensionStr)) {
-				Time t = new Time();
-				t.setTime(new Date());
-				dimensionList = t.getValueList();
-			} else if (GatewayDimensionConverter.DATE.getCode().equals(dimensionStr)) {
-				com.homesnap.engine.connector.openwebnet.gateway.dimension.Date d = new com.homesnap.engine.connector.openwebnet.gateway.dimension.Date();
-				d.setDate(new Date());
-				dimensionList = d.getValueList();
-			} else if (GatewayDimensionConverter.DATETIME.getCode().equals(
-					dimensionStr)) {
-				DateTime dt = new DateTime();
-				dt.setDate(new Date());
-				dimensionList = dt.getValueList();
-			} else if (GatewayDimensionConverter.IP_ADDRESS.getCode().equals(
-					dimensionStr)) {
-				dimensionList = dimensionCache.get(where
-						+ "-" + dimensionStr);
-				if (dimensionList == null) {
-					IpAddress i = new IpAddress();
-					InetAddress a = getIp();
-					if (a!=null) {
-						byte[] addr = a.getAddress();
-						i.setIpAddress(addr[0],addr[1],addr[2],addr[3]);
-					} else {
-						i.setIpAddress(Byte.parseByte("120"), Byte.parseByte("120"), (byte) 0, (byte) 1);		
-					}
-					dimensionList = i.getValueList();
-				}
-			} else if (GatewayDimensionConverter.NETMASK.getCode().equals(
-					dimensionStr)) {
-				dimensionList = dimensionCache.get(where
-						+ "-" + dimensionStr);
-				if (dimensionList == null) {
-					IpAddress i = new IpAddress();
-					InetAddress a = getIp();
-					if (a!=null) {
-						byte[] addr = getNetmask();
-						i.setIpAddress(addr[0],addr[1],addr[2],addr[3]);
-					} else {
-						i.setIpAddress(Byte.parseByte("120"), Byte.parseByte("120"), (byte) 0, (byte) 1);		
-					}
-					dimensionList = i.getValueList();
-				}
-			} else if (GatewayDimensionConverter.MAC_ADDRESS.getCode().equals(
-					dimensionStr)) {
-				dimensionList = dimensionCache.get(where
-						+ "-" + dimensionStr);
-				if (dimensionList == null) {
-					MacAddress i = new MacAddress();
-					byte[] a = getMacAddress();
-					if (a!=null) { 
-						i.setMacAddress(a[0], a[1], a[2], a[3], a[4], a[5]);
-					} else {
-						i.setMacAddress(Byte.parseByte("120"), Byte.parseByte("120"), (byte)0, (byte)1, (byte)0, (byte)1);		
-					}
-					
-					dimensionList = i.getValueList();
-				}
-			} else if (GatewayDimensionConverter.FIRMWARE_VERSION.getCode().equals(
-					dimensionStr)) {
-				FirmwareVersion f = new FirmwareVersion();
-				f.setDistributionVersion(19, 5, 78);
-				dimensionList = f.getValueList();
-			} else if (GatewayDimensionConverter.DISTRIBUTION_VERSION.getCode().equals(
-					dimensionStr)) {
-				DistributionVersion f = new DistributionVersion();
-				f.setDistributionVersion(19, 5, 78);
-				dimensionList = f.getValueList();
-			} else if (GatewayDimensionConverter.KERNEL_VERSION.getCode().equals(
-					dimensionStr)) {
-				FirmwareVersion f = new FirmwareVersion();
-				f.setDistributionVersion(19, 5, 78);
-				dimensionList = f.getValueList();
-			} else if (GatewayDimensionConverter.MODEL.getCode().equals(
-					dimensionStr)) {
-				Model f = new Model();
-				f.setModel(Model.ADGTESTSERVER);
-				dimensionList = f.getValueList();
-			} else if (GatewayDimensionConverter.UPTIME.getCode().equals(
-					dimensionStr)) {
-				DateTime dt = new DateTime();
-				dt.setDate(new Date());
-				dimensionList = dt.getValueList();
-			}  else {
-				return OpenWebNetConstant.NACK;
-			}
-	
-			if (dimensionList == null) {
-				dimensionList = new ArrayList<DimensionValue>();
-				dimensionCache.put(where + "-"
-						+ dimensionStr, dimensionList);
-			}
-			StringBuilder sb = new StringBuilder();
-			for (DimensionValue dimension : dimensionList) {
-				sb.append(dimension.getValue());
-				sb.append(OpenWebNetConstant.DIMENSION_SEPARATOR);
-			}
-			sb.setLength(sb.length() - 1);
-			return MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {
-					getWho(), where, dimensionStr, sb.toString() })
-					+ OpenWebNetConstant.ACK;
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
+	public List<String> status(String command) {
+		// Actually manage only one gateway... 
+		// TODO manage multi gateway configuration
+		List<String> result = new ArrayList<String>();
+		result.add(updateStatus(GATEWAY_ADDRESS, command));
+		return result;
 	}
 
 	@Override
 	public String getWho() {
-		return OpenWebNetConverterRegistry.WHO_GATEWAY.getValue();
+		return GatewayStatusConverter.OPEN_WEB_WHO;
 	}
 	
 	private InetAddress getIp() {
@@ -292,4 +183,118 @@ public class GatewaySimulator implements ControllerDimensionSimulator {
 		}
 		
 	}
+
+	private String updateStatus(String where, String command) {
+		try {
+			CommandParser parser = CommandParser.parse(command);
+			String dimensionStr = parser.getDimension();
+			List<DimensionValue> dimensionList;
+			if (GatewayStatusConverter.GatewayDimension.TIME.getCode().equals(dimensionStr)) {
+				Time t = new Time();
+				t.setTime(new Date());
+				dimensionList = t.getValueList();
+			} else if (GatewayStatusConverter.GatewayDimension.DATE.getCode().equals(dimensionStr)) {
+				com.homesnap.engine.connector.openwebnet.gateway.dimension.Date d = new com.homesnap.engine.connector.openwebnet.gateway.dimension.Date();
+				d.setDate(new Date());
+				dimensionList = d.getValueList();
+			} else if (GatewayStatusConverter.GatewayDimension.DATETIME.getCode().equals(
+					dimensionStr)) {
+				DateTime dt = new DateTime();
+				dt.setDate(new Date());
+				dimensionList = dt.getValueList();
+			} else if (GatewayStatusConverter.GatewayDimension.IP_ADDRESS.getCode().equals(
+					dimensionStr)) {
+				dimensionList = dimensionCache.get(where
+						+ "-" + dimensionStr);
+				if (dimensionList == null) {
+					IpAddress i = new IpAddress();
+					InetAddress a = getIp();
+					if (a!=null) {
+						byte[] addr = a.getAddress();
+						i.setIpAddress(addr[0],addr[1],addr[2],addr[3]);
+					} else {
+						i.setIpAddress(Byte.parseByte("120"), Byte.parseByte("120"), (byte) 0, (byte) 1);		
+					}
+					dimensionList = i.getValueList();
+				}
+			} else if (GatewayStatusConverter.GatewayDimension.NETMASK.getCode().equals(
+					dimensionStr)) {
+				dimensionList = dimensionCache.get(where
+						+ "-" + dimensionStr);
+				if (dimensionList == null) {
+					IpAddress i = new IpAddress();
+					InetAddress a = getIp();
+					if (a!=null) {
+						byte[] addr = getNetmask();
+						i.setIpAddress(addr[0],addr[1],addr[2],addr[3]);
+					} else {
+						i.setIpAddress(Byte.parseByte("120"), Byte.parseByte("120"), (byte) 0, (byte) 1);		
+					}
+					dimensionList = i.getValueList();
+				}
+			} else if (GatewayStatusConverter.GatewayDimension.MAC_ADDRESS.getCode().equals(
+					dimensionStr)) {
+				dimensionList = dimensionCache.get(where
+						+ "-" + dimensionStr);
+				if (dimensionList == null) {
+					MacAddress i = new MacAddress();
+					byte[] a = getMacAddress();
+					if (a!=null) { 
+						i.setMacAddress(a[0], a[1], a[2], a[3], a[4], a[5]);
+					} else {
+						i.setMacAddress(Byte.parseByte("120"), Byte.parseByte("120"), (byte)0, (byte)1, (byte)0, (byte)1);		
+					}
+					
+					dimensionList = i.getValueList();
+				}
+			} else if (GatewayStatusConverter.GatewayDimension.FIRMWARE_VERSION.getCode().equals(
+					dimensionStr)) {
+				FirmwareVersion f = new FirmwareVersion();
+				f.setDistributionVersion(19, 5, 78);
+				dimensionList = f.getValueList();
+			} else if (GatewayStatusConverter.GatewayDimension.DISTRIBUTION_VERSION.getCode().equals(
+					dimensionStr)) {
+				DistributionVersion f = new DistributionVersion();
+				f.setDistributionVersion(19, 5, 78);
+				dimensionList = f.getValueList();
+			} else if (GatewayStatusConverter.GatewayDimension.KERNEL_VERSION.getCode().equals(
+					dimensionStr)) {
+				FirmwareVersion f = new FirmwareVersion();
+				f.setDistributionVersion(19, 5, 78);
+				dimensionList = f.getValueList();
+			} else if (GatewayStatusConverter.GatewayDimension.MODEL.getCode().equals(
+					dimensionStr)) {
+				Model f = new Model();
+				f.setModel(Model.ADGTESTSERVER);
+				dimensionList = f.getValueList();
+			} else if (GatewayStatusConverter.GatewayDimension.UPTIME.getCode().equals(
+					dimensionStr)) {
+				DateTime dt = new DateTime();
+				dt.setDate(new Date());
+				dimensionList = dt.getValueList();
+			}  else {
+				return OpenWebNetConstant.NACK;
+			}
+	
+			if (dimensionList == null) {
+				dimensionList = new ArrayList<DimensionValue>();
+				dimensionCache.put(where + "-"
+						+ dimensionStr, dimensionList);
+			}
+			StringBuilder sb = new StringBuilder();
+			for (DimensionValue dimension : dimensionList) {
+				sb.append(dimension.getValue());
+				sb.append(OpenWebNetConstant.DIMENSION_SEPARATOR);
+			}
+			sb.setLength(sb.length() - 1);
+			return MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {
+					getWho(), where, dimensionStr, sb.toString() })
+					+ OpenWebNetConstant.ACK;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 }
