@@ -16,3 +16,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.homesnap.simulationServer.controllermodules.automation
 Require-Bundle: com.homesnap.engine,com.homesnap.simulationServer
+
