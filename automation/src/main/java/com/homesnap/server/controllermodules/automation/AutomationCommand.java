@@ -1,5 +1,8 @@
 package com.homesnap.server.controllermodules.automation;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 /*
  * #%L
  * HomeSnap Legrand Simulation Gateway AutomationModule
@@ -28,11 +31,12 @@ import java.text.MessageFormat;
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.automation.AutomationStatusConverter;
 import com.homesnap.server.ControllerStateManagement;
+import com.homesnap.server.controllermodules.StatusManager;
 
 public class AutomationCommand {
 	
 	// OSGi Shell Function
-	static final String[] functions = { "up", "down", "stop" };
+	static final String[] functions = { "up", "down", "stop", "loadConfiguration" };
 	
 	public String up(String address) {
 		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {new AutomationStatusConverter().getOpenWebWho() , AutomationStatusConverter.AutomationStatus.AUTOMATION_UP.getCode(), address} ));
@@ -44,5 +48,17 @@ public class AutomationCommand {
 	
 	public String stop(String address) {
 		return ControllerStateManagement.executeCommand(MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {new AutomationStatusConverter().getOpenWebWho(), AutomationStatusConverter.AutomationStatus.AUTOMATION_STOP.getCode(), address} ));	
+	}
+	
+	public String loadConfiguration(String file) {
+		try {
+			FileInputStream fis = new FileInputStream(file);
+			AutomationSimulator.setStatusManager(new StatusManager(fis));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return "Load failed.";
+		}
+		
+		return "Load done (at least file exist...).";
 	}
 }

@@ -26,8 +26,8 @@ package com.homesnap.server.controllermodules.automation;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
+import java.util.MissingResourceException;
 
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.WhereType;
@@ -35,11 +35,19 @@ import com.homesnap.engine.connector.openwebnet.automation.AutomationStatusConve
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
 import com.homesnap.server.controllermodules.ControllerSimulator;
+import com.homesnap.server.controllermodules.StatusManager;
 
 public class AutomationSimulator implements ControllerSimulator {
 	
-	private static Hashtable<String, String> statusList = new Hashtable<String, String>(); // where, what
+	private static StatusManager statusList;
+
+	public AutomationSimulator(StatusManager sm) {
+		statusList = sm;
+	}
 	
+	public static void setStatusManager(StatusManager statusList) {
+		AutomationSimulator.statusList = statusList;
+	}	
 	@Override
 	public String execute(String command) {
 		try {
@@ -78,6 +86,10 @@ public class AutomationSimulator implements ControllerSimulator {
 	}
 	
 	private void updateController(String where, String what) {
+		if (!statusList.containsKey(where)) {
+			throw new MissingResourceException("Device don't exist [" + where + ":" + what +  "]", what, where);
+		}
+		
 		if (AutomationStatusConverter.AutomationStatus.AUTOMATION_DOWN.getCode().equals(what)
 				|| AutomationStatusConverter.AutomationStatus.AUTOMATION_STOP.getCode().equals(what)
 				|| AutomationStatusConverter.AutomationStatus.AUTOMATION_UP.getCode().equals(what)) {
@@ -129,14 +141,10 @@ public class AutomationSimulator implements ControllerSimulator {
 	
 	private String updateStatus(String where) {
 		String what = statusList.get(where);
-		if (what == null) {
-			what = AutomationStatusConverter.AutomationStatus.AUTOMATION_STOP.getCode();
-			statusList.put(where, what);
-		}
-		return MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {getWho(), what, where} );
+		return what == null ? null : MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {getWho(), what, where} );
 		
 	}
-
+	
 	@Override
 	public String getWho() {
 		return new AutomationStatusConverter().getOpenWebWho();

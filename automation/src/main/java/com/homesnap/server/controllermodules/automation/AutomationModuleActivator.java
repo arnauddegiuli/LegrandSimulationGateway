@@ -31,13 +31,16 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 import com.homesnap.server.ControllerStateManagement;
+import com.homesnap.server.controllermodules.StatusManager;
 
 public class AutomationModuleActivator implements BundleActivator {
 
-	private AutomationSimulator automationModule = new AutomationSimulator();
+	private AutomationSimulator automationModule;
 	
 	@Override
 	public void start(BundleContext context) throws Exception {
+		
+		automationModule = new AutomationSimulator(new StatusManager(context.getBundle().getResource("automation.properties").openConnection().getInputStream()));
 		
 		Dictionary<String, Object> dict = new Hashtable<String, Object>();
 		dict.put("osgi.command.scope", "automation");
