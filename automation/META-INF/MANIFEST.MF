@@ -1,18 +1,18 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: HomeSnapServerAutomationModule
-Bundle-SymbolicName: com.homesnap.server.controllermodules.automation
+Bundle-Name: HomeSnapSimulationServerAutomationModule
+Bundle-SymbolicName: com.homesnap.simulationServer.controllermodules.automation
 Bundle-Version: 0.1
-Bundle-Activator: com.homesnap.server.controllermodules.automation.AutomationModuleActivator
+Bundle-Activator: com.homesnap.simulationServer.controllermodules.automation.AutomationModuleActivator
 Import-Package: com.homesnap.engine,
- com.homesnap.engine.controller,
  com.homesnap.engine.connector.openwebnet,
  com.homesnap.engine.connector.openwebnet.parser,
+ com.homesnap.engine.controller,
  com.homesnap.engine.controller.automation,
- com.homesnap.server.controllermodules,
- com.homesnap.server,
+ com.homesnap.simulationServer,
+ com.homesnap.simulationServer.controllermodules,
  org.osgi.framework
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: com.homesnap.server.controllermodules.automation
-Require-Bundle: com.homesnap.engine,com.homesnap.server
+Export-Package: com.homesnap.simulationServer.controllermodules.automation
+Require-Bundle: com.homesnap.engine,com.homesnap.simulationServer

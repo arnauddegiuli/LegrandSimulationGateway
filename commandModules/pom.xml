@@ -1,15 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.homesnap.legrand.gateway.simulation.controllermodules</groupId>
+	<groupId>com.homesnap.simulationServer.controllermodules</groupId>
 	<artifactId>commandmodules</artifactId>
 	<packaging>bundle</packaging>
 	<name>HomeSnap Legrand Simulation Gateway Interfaces</name>
 	<description>My Home virtual server pluggin interfaces</description>
 
 	<parent>
-		<groupId>com.homesnap.legrand.gateway.simulation</groupId>
-		<artifactId>project</artifactId>
+		<groupId>com.homesnap.simulationServer</groupId>
+		<artifactId>LegrandSimulationGatewayProject</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
@@ -30,7 +30,7 @@
 						<Bundle-Version>${project.version}</Bundle-Version>
 						<Import-Package>com.homesnap.engine.controller,
 							org.osgi.framework</Import-Package>
-						<Export-Package>com.homesnap.server.controllermodules</Export-Package>
+						<Export-Package>com.homesnap.simulationServer.controllermodules</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>
