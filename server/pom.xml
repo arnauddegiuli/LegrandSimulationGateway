@@ -4,11 +4,11 @@
 	<artifactId>server</artifactId>
 	<packaging>bundle</packaging>
 	<name>HomeSnap Legrand Simulation Gateway Server</name>
-	<description>Home Snap virtual server to test the MyDomo project</description>
+	<description>Home Snap virtual server to test the HomeSnap project</description>
 
 	<parent>
-		<groupId>com.homesnap.legrand.gateway.simulation</groupId>
-		<artifactId>project</artifactId>
+		<groupId>com.homesnap.simulationServer</groupId>
+		<artifactId>LegrandSimulationGatewayProject</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
@@ -27,15 +27,15 @@
 						<Bundle-Description>${project.description}</Bundle-Description>
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
 						<Bundle-Version>0.1</Bundle-Version>
-						<Bundle-Activator>com.homesnap.server.MyDomoServerActivator</Bundle-Activator>
+						<Bundle-Activator>com.homesnap.simulationServer.HomeSnapServerActivator</Bundle-Activator>
 						<Import-Package>
 							com.homesnap.engine,
 							com.homesnap.engine.connector.openwebnet,
 							com.homesnap.engine.connector.openwebnet.parser,
-							com.homesnap.server.controllermodules,
+							com.homesnap.simulationServer.controllermodules,
 							org.osgi.framework
 						</Import-Package>
-						<Export-Package>com.homesnap.server</Export-Package>
+						<Export-Package>com.homesnap.simulationServer</Export-Package>
 						<Require-Bundle>com.homesnap.engine</Require-Bundle>
 					</instructions>
 				</configuration>
@@ -114,7 +114,7 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.homesnap.legrand.gateway.simulation.controllermodules</groupId>
+			<groupId>com.homesnap.simulationServer.controllermodules</groupId>
 			<artifactId>commandmodules</artifactId>
 			<version>${project.version}</version>
 		</dependency>

@@ -1,16 +1,16 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: MyDomoServerGatewayModule
-Bundle-SymbolicName: com.homesnap.server.controllermodule.gateway
+Bundle-Name: HomeSnapSimulationServerGatewayModule
+Bundle-SymbolicName: com.homesnap.simulationServer.controllermodule.gateway
 Bundle-Version: 0.1
-Bundle-Activator: com.homesnap.server.controllermodules.gateway.GatewayModuleActivator
+Bundle-Activator: com.homesnap.simulationServer.controllermodules.gateway.GatewayModuleActivator
 Import-Package: com.homesnap.engine,
  com.homesnap.engine.connector.openwebnet,
  com.homesnap.engine.controller.what.impl,
- com.homesnap.server,
- com.homesnap.server.controllermodules,
+ com.homesnap.simulationServer,
+ com.homesnap.simulationServer.controllermodules,
  org.osgi.framework
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: com.homesnap.server.controllermodules.gateway
-Require-Bundle: com.homesnap.engine, com.homesnap.server
+Export-Package: com.homesnap.simulationServer.controllermodules.gateway
+Require-Bundle: com.homesnap.engine, com.homesnap.simulationServer
