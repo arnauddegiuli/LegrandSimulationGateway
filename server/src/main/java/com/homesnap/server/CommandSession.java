@@ -119,7 +119,7 @@ public class CommandSession implements Runnable {
 						}
 					}	
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
+					log.finest(Session.Command, "Error during parsing command [" + lue + "]: command is not supported or wrong...");
 					e.printStackTrace();
 				}
 				
@@ -130,7 +130,7 @@ public class CommandSession implements Runnable {
 
 	public void stop() {
 		try {
-			log.fine(Log.Session.Command, "End Command Session.");
+			log.fine(Session.Command, "End Command Session.");
 			if (client != null) {
 				client.close();
 			}
