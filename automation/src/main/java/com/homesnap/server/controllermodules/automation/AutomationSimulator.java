@@ -120,7 +120,7 @@ public class AutomationSimulator implements ControllerSimulator {
 
 			result.add(OpenWebNetConstant.ACK);
 		} catch (ParseException e) {
-				// TODO Auto-generated catch block
+			System.out.println("Unexpected error during parsing command ["+ command +"] (probably unsupported command or feature from the command):");
 			e.printStackTrace();
 			result.add(OpenWebNetConstant.NACK);
 		}
