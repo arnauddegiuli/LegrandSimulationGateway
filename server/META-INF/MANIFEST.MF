@@ -1,16 +1,16 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: HomeSnapServer;singleton:=true;
-Bundle-SymbolicName: com.homesnap.server;singleton:=true
+Bundle-Name: HomeSnapSimulationServer;singleton:=true;
+Bundle-SymbolicName: com.homesnap.simulationServer;singleton:=true
 Bundle-Version: 0.1
-Bundle-Activator: com.homesnap.server.MyDomoServerActivator
-Export-Package: com.homesnap.server
+Bundle-Activator: com.homesnap.simulationServer.HomeSnapServerActivator
+Export-Package: com.homesnap.simulationServer
 Require-Bundle: com.homesnap.engine
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7
 Import-Package: com.homesnap.engine,
  com.homesnap.engine.connector.openwebnet,
  com.homesnap.engine.connector.openwebnet.parser,
- com.homesnap.server.controllermodules,
+ com.homesnap.simulationServer.controllermodules,
  org.osgi.framework
 Bundle-ActivationPolicy: lazy

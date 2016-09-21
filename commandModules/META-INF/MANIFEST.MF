@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: HomeSnapServerDeviceModuleInterface
-Bundle-SymbolicName: com.homesnap.server.controllermodules
+Bundle-Name: HomeSnapSimulationServerDeviceModuleInterface
+Bundle-SymbolicName: com.homesnap.simulationServer.controllermodules
 Bundle-Version: 0.1
-Export-Package: com.homesnap.server.controllermodules
+Export-Package: com.homesnap.simulationServer.controllermodules
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: com.homesnap.engine.controller,

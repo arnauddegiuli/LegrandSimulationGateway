@@ -1,15 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.homesnap.legrand.gateway.simulation.controllermodules</groupId>
+	<groupId>com.homesnap.simulationServer.controllermodules</groupId>
 	<artifactId>gateway</artifactId>
 	<packaging>bundle</packaging>
 	<name>HomeSnap Legrand Simulation Gateway GatewayModule</name>
 	<description>HomeSnap virtual server pluggin gateway device</description>
 
 	<parent>
-		<groupId>com.homesnap.legrand.gateway.simulation</groupId>
-		<artifactId>project</artifactId>
+		<groupId>com.homesnap.simulationServer</groupId>
+		<artifactId>LegrandSimulationGatewayProject</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
@@ -28,16 +28,16 @@
 						<Bundle-Description>${project.description}</Bundle-Description>
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
 						<Bundle-Version>${project.version}</Bundle-Version>
-						<Bundle-Activator>com.homesnap.server.controllermodules.gateway.GatewayModuleActivator</Bundle-Activator>
+						<Bundle-Activator>com.homesnap.simulationServer.controllermodules.gateway.GatewayModuleActivator</Bundle-Activator>
 						<Import-Package> com.homesnap.engine,
 							 com.homesnap.engine.connector.openwebnet,
 							 com.homesnap.engine.controller.what.impl,
-							 com.homesnap.server,
-							 com.homesnap.server.controllermodules,
+							 com.homesnap.simulationServer,
+							 com.homesnap.simulationServer.controllermodules,
 							 org.osgi.framework
  						</Import-Package>
-						<Export-Package>com.homesnap.server.controllermodules.gateway</Export-Package>
-						<Require-Bundle>com.homesnap.engine, com.homesnap.server</Require-Bundle>
+						<Export-Package>com.homesnap.simulationServer.controllermodules.gateway</Export-Package>
+						<Require-Bundle>com.homesnap.engine, com.homesnap.simulationServer</Require-Bundle>
 					</instructions>
 				</configuration>
 			</plugin>
@@ -113,12 +113,12 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.homesnap.legrand.gateway.simulation.controllermodules</groupId>
+			<groupId>com.homesnap.simulationServer.controllermodules</groupId>
 			<artifactId>commandmodules</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.homesnap.legrand.gateway.simulation</groupId>
+			<groupId>com.homesnap.simulationServer</groupId>
 			<artifactId>server</artifactId>
 			<version>${project.version}</version>
 		</dependency>
