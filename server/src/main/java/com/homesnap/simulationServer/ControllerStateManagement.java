@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import com.homesnap.engine.Log;
+import com.homesnap.engine.Log.Session;
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
@@ -37,6 +39,7 @@ public class ControllerStateManagement {
 	
 	private static Hashtable<String, ControllerSimulator> controllerCommandList = new Hashtable<String, ControllerSimulator>();
 	private static Hashtable<String, ControllerDimensionSimulator> controllerDimensionCommandList = new Hashtable<String, ControllerDimensionSimulator>();
+	private static Log log = new Log();
 	
 	private static List<MonitorSession> monitorList = new ArrayList<MonitorSession>();
 	
@@ -131,7 +134,7 @@ public class ControllerStateManagement {
 			}
 			return result;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+			log.finest(Session.Server, "Error during parsing command [" + command + "]");
 			e.printStackTrace();
 			return null;
 		}
@@ -185,7 +188,7 @@ public class ControllerStateManagement {
 				}
 			}}
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+			log.finest(Session.Server, "Error during parsing command [" + command + "]");
 			e.printStackTrace();
 			List<String> result = new ArrayList<String>();
 			result.add(OpenWebNetConstant.NACK);
