@@ -34,13 +34,13 @@
 							 com.homesnap.engine.controller,
 							 com.homesnap.engine.connector.openwebnet,
 							 com.homesnap.engine.connector.openwebnet.parser,
-							 com.homesnap.engine.controller.automation,
-							 com.homesnap.simulationServer.controllermodules,
 							 com.homesnap.simulationServer,
+							 com.homesnap.simulationServer.controllermodules,
+							 com.homesnap.engine.controller.automation,
 							 org.osgi.framework
 						</Import-Package>
 						<Export-Package> com.homesnap.simulationServer.controllermodules.automation</Export-Package>
-						<Require-Bundle>com.homesnap.engine,com.homesnap.simulationServer</Require-Bundle>
+						<Require-Bundle>com.homesnap.engine</Require-Bundle>
 					</instructions>
 				</configuration>
 			</plugin>

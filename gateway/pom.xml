@@ -31,13 +31,13 @@
 						<Bundle-Activator>com.homesnap.simulationServer.controllermodules.gateway.GatewayModuleActivator</Bundle-Activator>
 						<Import-Package> com.homesnap.engine,
 							 com.homesnap.engine.connector.openwebnet,
-							 com.homesnap.engine.controller.what.impl,
 							 com.homesnap.simulationServer,
+							 com.homesnap.engine.connector.openwebnet.gateway,
 							 com.homesnap.simulationServer.controllermodules,
 							 org.osgi.framework
  						</Import-Package>
 						<Export-Package>com.homesnap.simulationServer.controllermodules.gateway</Export-Package>
-						<Require-Bundle>com.homesnap.engine, com.homesnap.simulationServer</Require-Bundle>
+						<Require-Bundle>com.homesnap.engine</Require-Bundle>
 					</instructions>
 				</configuration>
 			</plugin>
