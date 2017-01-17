@@ -112,7 +112,7 @@
 		<dependency>
 			<groupId>com.homesnap</groupId>
 			<artifactId>engine</artifactId>
-			<version>0.0.1</version>
+			<version>${engine.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.homesnap.simulationServer.controllermodules</groupId>
