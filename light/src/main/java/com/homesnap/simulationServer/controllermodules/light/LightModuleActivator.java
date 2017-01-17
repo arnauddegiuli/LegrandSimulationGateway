@@ -4,7 +4,7 @@ package com.homesnap.simulationServer.controllermodules.light;
  * #%L
  * HomeSnap Legrand Simulation Gateway LightModule
  * %%
- * Copyright (C) 2011 - 2016 A. de Giuli
+ * Copyright (C) 2011 - 2017 A. de Giuli
  * %%
  * This file is part of MyDomo done by A. de Giuli (arnaud.degiuli(at)free.fr).
  * 
