@@ -34,7 +34,7 @@ import java.util.Set;
 
 public class StatusManager implements Map<String,String> {
 
-	private static Hashtable<String, String> statusList = new Hashtable<String, String>(); // where, what
+	private Hashtable<String, String> statusList = new Hashtable<String, String>(); // where, what
 	
 	public StatusManager(InputStream is) {
 		read(is);
@@ -45,7 +45,7 @@ public class StatusManager implements Map<String,String> {
 		try {
 			p.load(f);
 			for (String key : p.stringPropertyNames()) {
-				statusList.put(key, p.getProperty(key)); // TODO BIG BUGGGGG: use where as id... but NO!!!! as statusList is static all manager (what) share the same values
+				statusList.put(key, p.getProperty(key));
 			} 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
