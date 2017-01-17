@@ -45,7 +45,7 @@ public class StatusManager implements Map<String,String> {
 		try {
 			p.load(f);
 			for (String key : p.stringPropertyNames()) {
-				statusList.put(key, p.getProperty(key));
+				statusList.put(key, p.getProperty(key)); // TODO BIG BUGGGGG: use where as id... but NO!!!! as statusList is static all manager (what) share the same values
 			} 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
