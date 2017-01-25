@@ -16,6 +16,7 @@
 		<module>gateway</module>
 		<module>heating</module>
 		<module>automation</module>
+		<module>distribution</module>
 	</modules>
 
 	<properties>
@@ -57,6 +58,10 @@
 			  <licenseName>gpl_v2</licenseName>
 			</configuration>
 		      </plugin>
+			<plugin>
+			  <artifactId>maven-assembly-plugin</artifactId>
+			  <version>3.0.0</version>
+			</plugin>
 		    </plugins>
 	</build>
 
