@@ -27,14 +27,15 @@ package com.homesnap.simulationServer.controllermodules.automation;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.MissingResourceException;
 
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.WhereType;
 import com.homesnap.engine.connector.openwebnet.automation.AutomationStatusConverter;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
+import com.homesnap.engine.controller.who.Who;
 import com.homesnap.simulationServer.controllermodules.ControllerSimulator;
+import com.homesnap.simulationServer.controllermodules.UnknownDeviceException;
 import com.homesnap.simulationServer.controllermodules.StatusManager;
 
 public class AutomationSimulator implements ControllerSimulator {
@@ -82,12 +83,15 @@ public class AutomationSimulator implements ControllerSimulator {
 		} catch (UnsupportedOperationException e) {
 			System.out.println("Command not supported [" + command + "]");
 			return OpenWebNetConstant.NACK;
+		} catch (UnknownDeviceException e) {
+			System.out.println(e.getMessage());
+			return OpenWebNetConstant.NACK;
 		}
 	}
 	
-	private void updateController(String where, String what) {
+	private void updateController(String where, String what) throws UnknownDeviceException {
 		if (!statusList.containsKey(where)) {
-			throw new MissingResourceException("Device don't exist [" + where + ":" + what +  "]", what, where);
+			throw new UnknownDeviceException(Who.AUTOMATION, where, what);
 		}
 		
 		if (AutomationStatusConverter.AutomationStatus.AUTOMATION_DOWN.getCode().equals(what)
@@ -135,11 +139,17 @@ public class AutomationSimulator implements ControllerSimulator {
 			System.out.println("Unexpected error during parsing command ["+ command +"] (probably unsupported command or feature from the command):");
 			e.printStackTrace();
 			result.add(OpenWebNetConstant.NACK);
+		} catch (UnknownDeviceException e) {
+			System.out.println(e.getMessage());
+			result.add(OpenWebNetConstant.NACK);
 		}
 		return result;
 	}
 	
-	private String updateStatus(String where) {
+	private String updateStatus(String where) throws UnknownDeviceException {
+		if (!statusList.containsKey(where)) {
+			throw new UnknownDeviceException(Who.AUTOMATION, where, null);
+		}
 		String what = statusList.get(where);
 		return what == null ? null : MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {getWho(), what, where} );
 		

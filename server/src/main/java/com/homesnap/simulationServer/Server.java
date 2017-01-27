@@ -30,165 +30,188 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.homesnap.engine.Log;
 import com.homesnap.engine.Log.Session;
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 
-public class Server implements Runnable {
+public class Server {
 
 	Log log = new Log();
 	private int port = 1234;
 	private Integer password = 12345;
 	private static final int nonce = 603356072;
-	private volatile Thread blinker;
-	
-    public void stop() {
-        blinker = null;
-    }
+	private final int poolSize = 10;
 
-    public void start() {
-        blinker = new Thread(this);
-        blinker.start();
-    }
-    
-    public void run() {
-		ServerSocket serveur;
-		Thread thisThread = Thread.currentThread();
-		// installation
+	private final ServerSocket serverSocket;
+	private final ExecutorService pool;
+
+	public Server() throws IOException {
+		log.debug = true;
+		log.error = true;
+		log.info = true;
+		log.finest = true;
+		serverSocket = new ServerSocket(port);
+		pool = Executors.newFixedThreadPool(poolSize);
+	}
+
+	public void stop() {
+		pool.shutdown();
+	}
+
+	public void start() {
 		try {
-			serveur = new ServerSocket(port);
-
-			while (blinker == thisThread) {
-
-				System.out
-						.println("Waiting connection for Monitor/Command on port ["
-								+ port + "]...");
-				
-				Socket s = serveur.accept(); // création de nouvelles connexions
-				BufferedReader depuisClient; // réception de requête
-				PrintWriter versClient; 	 // envoi des réponses
-
-				try {
-					// Read from client
-					depuisClient = new BufferedReader(new InputStreamReader(
-							s.getInputStream()));
-					// Write to client
-					versClient = new PrintWriter(new OutputStreamWriter(
-							s.getOutputStream()), true);
-					// Welcome ack
-					write(Session.Server, OpenWebNetConstant.ACK, versClient);
-					String sessionType = read(s, depuisClient);
-					if (OpenWebNetConstant.MONITOR_SESSION.equalsIgnoreCase(sessionType)) {
-						if (password != null) {
-							write(Session.Monitor, "*#" + nonce + "##", versClient);
-							String result = read(s, depuisClient);
-							if (!"*#25280520##".equals(result)) {
-								log.fine(Session.Monitor, "Password error..."); 
-								write(Session.Monitor, OpenWebNetConstant.NACK, versClient);
-								break;
-							}
-						}
-						
-						log.fine(Session.Monitor, "Start Monitor Session..."); 
-						write(Session.Monitor, OpenWebNetConstant.ACK, versClient);
-						ControllerStateManagement.registerMonitorSession(
-								new MonitorSession(s, versClient)
-						);
-
-					} else if (OpenWebNetConstant.COMMAND_SESSION
-							.equalsIgnoreCase(sessionType)) {
-						if (password != null) {
-							write(Session.Monitor, "*#" + nonce + "##", versClient);
-							String result = read(s, depuisClient);
-							if (!"*#25280520##".equals(result)) {
-								log.fine(Session.Monitor, "Password error..."); 
-								write(Session.Monitor, OpenWebNetConstant.NACK, versClient);
-								break;
-							}
-						}
-						log.fine(Session.Command, "Start Command Session...");
-						write(Session.Command, OpenWebNetConstant.ACK, versClient);
-						new Thread(new CommandSession(s, depuisClient,
-								versClient)).start();
-
-					} else {
-						write(Session.Server, OpenWebNetConstant.NACK, versClient);
-					}
-				} catch (IOException e) {
-					try {
-						s.close();
-					} catch (IOException ee) {
-					}
-				}
+			System.out.println("Waiting connection for Monitor/Command on port [" + port + "]...");
+			for (;;) {
+				pool.execute(new Handler(serverSocket.accept()));
 			}
 		} catch (IOException e) {
 			System.out.println("Error during Socket creation : "
 					+ e.getMessage());
 			System.exit(1);
+			pool.shutdown();
 		}
 	}
-	
+
 	public static void main(String args[]) {
 
-		Server s = new Server();
-		
-		// définition du port
 		try {
-			s.port = Integer.parseInt(args[0]);
-		} catch (Exception e) {
-			s.port = 1234; // valeur par défaut
+			Server s = new Server();
+
+			// définition du port
+			try {
+				s.port = Integer.parseInt(args[0]);
+			} catch (Exception e) {
+				s.port = 1234; // valeur par défaut
+			}
+
+			s.start();
+		} catch (IOException e) {
+			System.out.println("Error during Server creation : "
+					+ e.getMessage());
+			System.exit(1);
 		}
 
-		s.start();
 	}
 
-	private void write(Session session, String msg, PrintWriter versClient) {
-		versClient.print(msg);
-		versClient.flush();
-		log.fine(session, "FROM " + session.name().toUpperCase() + " SERVER: " + msg);
-	}
+	class Handler implements Runnable {
+    	private final Socket socket;
+    	Log log = new Log();
+    	
+    	public Handler(Socket socket) {
+			this.socket = socket;
+		}
 
-	private String read(Socket client, BufferedReader depuisClient) {
-		int indice = 0;
-		boolean exit = false;
-		char respond[] = new char[1024];
-		char c = ' ';
-		int ci = 0;
-		String responseString = null;
+        public void run() {
+    		// installation
+				
+			BufferedReader depuisClient; // réception de requête
+			PrintWriter versClient; 	 // envoi des réponses
 
-		try {
-			do {
-				if (client != null && !client.isInputShutdown()) {
-					ci = depuisClient.read();
-					if (ci == -1) {
-						// System.out.println("End of read from socket.");
-						// client = null;
-						// break;
-					} else {
-						c = (char) ci;
-						if (c == '#' && indice > 1
-								&& '#' == respond[indice - 1]) {
-							respond[indice] = c;
-							exit = true;
-							break;
-						} else {
-							respond[indice] = c;
-							indice = indice + 1;
+			try {
+				// Read from client
+				depuisClient = new BufferedReader(new InputStreamReader(
+						socket.getInputStream()));
+				// Write to client
+				versClient = new PrintWriter(new OutputStreamWriter(
+						socket.getOutputStream()), true);
+				// Welcome ack
+				write(Session.Server, OpenWebNetConstant.ACK, versClient);
+				String sessionType = read(socket, depuisClient);
+				if (OpenWebNetConstant.MONITOR_SESSION.equalsIgnoreCase(sessionType)) {
+					if (password != null) {
+						write(Session.Monitor, "*#" + nonce + "##", versClient);
+						String result = read(socket, depuisClient);
+						if (!"*#25280520##".equals(result)) {
+							log.fine(Session.Monitor, "Password error..."); 
+							write(Session.Monitor, OpenWebNetConstant.NACK, versClient);
+							return;
 						}
 					}
+					
+					log.fine(Session.Monitor, "Start Monitor Session..."); 
+					write(Session.Monitor, OpenWebNetConstant.ACK, versClient);
+					ControllerStateManagement.registerMonitorSession(
+							new MonitorSession(socket, versClient)
+					);
+
+				} else if (OpenWebNetConstant.COMMAND_SESSION
+						.equalsIgnoreCase(sessionType)) {
+					if (password != null) {
+						write(Session.Monitor, "*#" + nonce + "##", versClient);
+						String result = read(socket, depuisClient);
+						if (!"*#25280520##".equals(result)) {
+							log.fine(Session.Monitor, "Password error..."); 
+							write(Session.Monitor, OpenWebNetConstant.NACK, versClient);
+							return;
+						}
+					}
+					log.fine(Session.Command, "Start Command Session...");
+					write(Session.Command, OpenWebNetConstant.ACK, versClient);
+					new CommandSession(socket, depuisClient,
+							versClient).run();
+
+				} else {
+					write(Session.Server, OpenWebNetConstant.NACK, versClient);
 				}
-			} while (true);
-		} catch (IOException e) {
-			System.out.println("Socket not available");
-		}
+			} catch (IOException e) {
+				try {
+					socket.close();
+				} catch (IOException ee) {
+				}
+			}
+    	}
+    	
+    	private void write(Session session, String msg, PrintWriter versClient) {
+    		versClient.print(msg);
+    		versClient.flush();
+    		log.fine(session, "FROM " + session.name().toUpperCase() + " SERVER: " + msg);
+    	}
 
-		if (exit == true) {
-			responseString = new String(respond, 0, indice + 1);
-		}
+    	private String read(Socket client, BufferedReader depuisClient) {
+    		int indice = 0;
+    		boolean exit = false;
+    		char respond[] = new char[1024];
+    		char c = ' ';
+    		int ci = 0;
+    		String responseString = null;
 
-		log.fine(Session.Server, "FROM SERVER CLIENT: " + responseString);
+    		try {
+    			do {
+    				if (client != null && !client.isInputShutdown()) {
+    					ci = depuisClient.read();
+    					if (ci == -1) {
+    						// System.out.println("End of read from socket.");
+    						// client = null;
+    						// break;
+    					} else {
+    						c = (char) ci;
+    						if (c == '#' && indice > 1
+    								&& '#' == respond[indice - 1]) {
+    							respond[indice] = c;
+    							exit = true;
+    							break;
+    						} else {
+    							respond[indice] = c;
+    							indice = indice + 1;
+    						}
+    					}
+    				}
+    			} while (true);
+    		} catch (IOException e) {
+    			System.out.println("Socket not available");
+    		}
 
-		return responseString;
-	}
+    		if (exit == true) {
+    			responseString = new String(respond, 0, indice + 1);
+    		}
+
+    		log.fine(Session.Server, "FROM SERVER CLIENT: " + responseString);
+
+    		return responseString;
+    	}
+
+    }
 }

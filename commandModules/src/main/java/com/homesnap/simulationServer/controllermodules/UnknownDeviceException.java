@@ -1,10 +1,8 @@
-package com.homesnap.simulationServer;
-
-import java.io.IOException;
+package com.homesnap.simulationServer.controllermodules;
 
 /*
  * #%L
- * HomeSnap Legrand Simulation Gateway Server
+ * HomeSnap Legrand Simulation Gateway Interfaces
  * %%
  * Copyright (C) 2011 - 2017 A. de Giuli
  * %%
@@ -25,37 +23,23 @@ import java.io.IOException;
  * #L%
  */
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
+import com.homesnap.engine.controller.who.Who;
 
-public class HomeSnapServerActivator implements BundleActivator {
+public class UnknownDeviceException extends Exception {
 
-	private Server server;
+	private static final long serialVersionUID = 1L;
+	private Who who;
+	private String where;
+	private String what;
 	
-	@Override
-	public void start(BundleContext arg0) throws Exception {
-		new Thread(new Handler()).start();
-	}
-
-	@Override
-	public void stop(BundleContext arg0) throws Exception {
-		server.stop();
+	public UnknownDeviceException(Who who, String where, String what) {
+		this.where = where;
+		this.what = what;
+		this.who = who;
 	}
 	
-	class Handler implements Runnable {
-
-		@Override
-		public void run() {
-			try {
-				server = new Server();
-			} catch (IOException e) {
-				System.out.println("Error during Server creation : "
-						+ e.getMessage());
-			}
-			server.start();
-		}
-		
+	public String getMessage() {
+		return "Device " + who + " doesn't exist [" + where + ":" + what +  "]";
 	}
 	
-
 }

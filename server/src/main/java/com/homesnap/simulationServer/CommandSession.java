@@ -35,7 +35,7 @@ import com.homesnap.engine.Log.Session;
 import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetCommand;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
 
-public class CommandSession implements Runnable {
+public class CommandSession {
 	private Socket client; // liaison avec client
 	private BufferedReader depuisClient; // réception de requête
 	private PrintWriter versClient; // envoi des réponses

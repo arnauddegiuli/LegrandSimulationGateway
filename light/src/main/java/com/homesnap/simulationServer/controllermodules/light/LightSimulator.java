@@ -34,7 +34,9 @@ import com.homesnap.engine.connector.openwebnet.WhereType;
 import com.homesnap.engine.connector.openwebnet.light.LightStatusConverter;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
+import com.homesnap.engine.controller.who.Who;
 import com.homesnap.simulationServer.controllermodules.ControllerSimulator;
+import com.homesnap.simulationServer.controllermodules.UnknownDeviceException;
 import com.homesnap.simulationServer.controllermodules.StatusManager;
 
 public class LightSimulator implements ControllerSimulator {
@@ -86,12 +88,15 @@ public class LightSimulator implements ControllerSimulator {
 		} catch (MissingResourceException e) {
 			System.out.println("Device doesn't exist [" + command + "]");
 			return OpenWebNetConstant.NACK;
+		} catch (UnknownDeviceException e) {
+			System.out.println(e.getMessage());
+			return OpenWebNetConstant.NACK;
 		}
 	}
 	
-	private void updateController(String where, String what) {
+	private void updateController(String where, String what) throws UnknownDeviceException {
 		if (!statusList.containsKey(where)) {
-			throw new MissingResourceException("Device don't exist [" + where + ":" + what +  "]", what, where);
+			throw new UnknownDeviceException(Who.LIGHT, where, null);
 		}
 		
 		if (LightStatusConverter.LightStatus.LIGHT_OFF.getCode().equals(what)
@@ -147,11 +152,17 @@ public class LightSimulator implements ControllerSimulator {
 				// TODO Auto-generated catch block
 			e.printStackTrace();
 			result.add(OpenWebNetConstant.NACK);
+		} catch (UnknownDeviceException e) {
+			System.out.println(e.getMessage());
+			result.add(OpenWebNetConstant.NACK);
 		}
 		return result;
 	}
 	
-	private String updateStatus(String where) {
+	private String updateStatus(String where) throws UnknownDeviceException {
+		if (!statusList.containsKey(where)) {
+			throw new UnknownDeviceException(Who.LIGHT, where, null);
+		}
 		String what = statusList.get(where);
 		return what == null ? null : MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {getWho(), what, where} );
 	}
