@@ -31,7 +31,6 @@ import java.net.Socket;
 import java.util.List;
 
 import com.homesnap.engine.Log;
-import com.homesnap.engine.Log.Session;
 import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetCommand;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
 
@@ -50,7 +49,7 @@ public class CommandSession {
 	private void write(String msg) {
 		versClient.print(msg);
 		versClient.flush();
-		log.fine(Session.Command, "FROM COMMAND SERVER: " + msg);
+		log.fine(this.getClass().getSimpleName(), "Send to COMMAND client: " + msg);
 	}
 
 	private String read(){
@@ -66,7 +65,7 @@ public class CommandSession {
 				if(client != null && !client.isInputShutdown()) {
 					ci = depuisClient.read();
 					if (ci == -1) {
-						log.finest(Session.Command, "End of read from command client socket.");
+						log.finest(this.getClass().getSimpleName(), "End of read from command client socket.");
 						client = null;
 						break;
 					} else { 
@@ -74,7 +73,6 @@ public class CommandSession {
 						if (c == '#' && indice > 1 && '#' == respond[indice-1]) {
 							respond[indice] = c;
 							exit = true;
-							log.finest(Log.Session.Command, "End of message from command client socket [" + new String(respond) + "].");
 							break;
 						} else {
 							respond[indice] = c;
@@ -87,25 +85,25 @@ public class CommandSession {
 				}
 			} while(true); 
 		} catch(IOException e) {
-			log.severe(Session.Command, "Socket not available");
+			log.severe(this.getClass().getSimpleName(), "Socket not available");
 		}
 
 		if (exit == true){
 			responseString = new String(respond,0,indice+1);
 		}
 
-		log.fine(Log.Session.Command, "FROM COMMAND CLIENT: " + responseString);
+		log.fine(this.getClass().getSimpleName(), "Read from COMMAND client: " + responseString);
 
 		return responseString;
 	}
 
 	public void run() {
-		boolean fini = false; // drapeau
+		boolean continu = true;
 		String lue; // la requête
-		while (!fini) {
+		while (continu) {
 			lue = read();
 			if (lue == null) {
-				fini = true;
+				continu = false;
 			}
 			else {
 				try {
@@ -119,7 +117,7 @@ public class CommandSession {
 						}
 					}	
 				} catch (ParseException e) {
-					log.finest(Session.Command, "Error during parsing command [" + lue + "]: command is not supported or wrong...");
+					log.finest(this.getClass().getSimpleName(), "Error during parsing command [" + lue + "]: command is not supported or wrong...");
 					e.printStackTrace();
 				}
 				
@@ -130,12 +128,12 @@ public class CommandSession {
 
 	public void stop() {
 		try {
-			log.fine(Session.Command, "End Command Session.");
+			log.fine(this.getClass().getSimpleName(), "End Command Session.");
 			if (client != null) {
 				client.close();
 			}
 		} catch (IOException e) {
-			log.severe(Session.Command, "Exception à la fermeture d'une connexion : "
+			log.severe(this.getClass().getSimpleName(), "Exception à la fermeture d'une connexion : "
 					+ e.getMessage());
 		}
 	}

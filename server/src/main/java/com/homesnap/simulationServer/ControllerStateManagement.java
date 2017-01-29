@@ -28,17 +28,14 @@ import java.util.Hashtable;
 import java.util.List;
 
 import com.homesnap.engine.Log;
-import com.homesnap.engine.Log.Session;
 import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
-import com.homesnap.simulationServer.controllermodules.ControllerDimensionSimulator;
 import com.homesnap.simulationServer.controllermodules.ControllerSimulator;
 
 public class ControllerStateManagement {
 	
 	private static Hashtable<String, ControllerSimulator> controllerCommandList = new Hashtable<String, ControllerSimulator>();
-	private static Hashtable<String, ControllerDimensionSimulator> controllerDimensionCommandList = new Hashtable<String, ControllerDimensionSimulator>();
 	private static Log log = new Log();
 	
 	private static List<MonitorSession> monitorList = new ArrayList<MonitorSession>();
@@ -61,19 +58,6 @@ public class ControllerStateManagement {
 	public synchronized static void unRegisterControllerCommand(ControllerSimulator controllerCommand) {
 		synchronized (controllerCommandList) {
 			controllerCommandList.remove(controllerCommand.getWho());
-		}
-	}
-	
-	public synchronized static void registerControllerDimensionCommand(ControllerDimensionSimulator controllerDimensionCommand) {
-		synchronized (controllerDimensionCommandList) {
-			controllerDimensionCommandList.put(controllerDimensionCommand.getWho(), controllerDimensionCommand);	
-		}
-		
-	}
-	
-	public synchronized static void unRegisterControllerDimensionCommand(ControllerDimensionSimulator controllerDimensionCommand) {
-		synchronized (controllerDimensionCommandList) {
-			controllerDimensionCommandList.remove(controllerDimensionCommand.getWho());
 		}
 	}
 
@@ -102,39 +86,31 @@ public class ControllerStateManagement {
 			String result;
 			ControllerSimulator cc;
 			synchronized (controllerCommandList) {
-				synchronized (controllerDimensionCommandList) {
-					cc = controllerCommandList.get(who);
-				
-					if (cc != null) {
-						result = cc.execute(command);
-					} else {
-						
-							ControllerDimensionSimulator cdc = controllerDimensionCommandList.get(who);
-							if (cdc != null) {
-								result = cdc.execute(command);
-							} else {
-								System.out.println("Command not supported [" + command + "]");
-								result = OpenWebNetConstant.NACK;
-							}
-					}
-		
-					if (!OpenWebNetConstant.NACK.equalsIgnoreCase(result)) {
-						synchronized (monitorList) {
-							// Monitor session closed is only detected when we try to lunch a command on it
-							// So, here we clone the monitor list since in monitor(command) method, if monitor session has been closed,
-							// it is removed from the monitorList => cause a concurrent modification not prevented by the lock because we
-							// are in the same thread...
-							List<MonitorSession> monitorList2 = new ArrayList<MonitorSession>(monitorList);
-							for (MonitorSession monitor : monitorList2) {
-								monitor.monitor(command);
-							}
+				cc = controllerCommandList.get(who);
+			
+				if (cc != null) {
+					result = cc.execute(command);
+				} else {
+					System.out.println("Command not supported [" + command + "]");
+					result = OpenWebNetConstant.NACK;
+				}
+	
+				if (!OpenWebNetConstant.NACK.equalsIgnoreCase(result)) {
+					synchronized (monitorList) {
+						// Monitor session closed is only detected when we try to lunch a command on it
+						// So, here we clone the monitor list since in monitor(command) method, if monitor session has been closed,
+						// it is removed from the monitorList => cause a concurrent modification not prevented by the lock because we
+						// are in the same thread...
+						List<MonitorSession> monitorList2 = new ArrayList<MonitorSession>(monitorList);
+						for (MonitorSession monitor : monitorList2) {
+							monitor.monitor(command);
 						}
 					}
 				}
 			}
 			return result;
 		} catch (ParseException e) {
-			log.finest(Session.Server, "Error during parsing command [" + command + "]");
+			log.finest(ControllerStateManagement.class.getName(), "Error during parsing command [" + command + "]");
 			e.printStackTrace();
 			return null;
 		}
@@ -152,48 +128,39 @@ public class ControllerStateManagement {
 			ControllerSimulator cc;
 
 			synchronized (controllerCommandList) {
-				synchronized (controllerDimensionCommandList) {
 				cc = controllerCommandList.get(who);
 			
-			if (cc != null) {
-				List<String> result = cc.status(command);
-				if (!result.isEmpty()){				
-					synchronized (monitorList) {
-						// Monitor session closed is only detected when we try to lunch a command on it
-						// So, here we clone the monitor list since in monitor(command) method, if monitor session has been closed,
-						// it is removed from the monitorList => cause a concurrent modification not prevented by the lock because we
-						// are in the same thread...
-						List<MonitorSession> monitorList2 = new ArrayList<MonitorSession>(monitorList);
-						for (MonitorSession monitor : monitorList2) {
-							for (String c : result) {
-								if (!OpenWebNetConstant.NACK.equalsIgnoreCase(c)) {
-									monitor.monitor(c);
+				if (cc != null) {
+					List<String> result = cc.status(command);
+					if (!result.isEmpty()){				
+						synchronized (monitorList) {
+							// Monitor session closed is only detected when we try to lunch a command on it
+							// So, here we clone the monitor list since in monitor(command) method, if monitor session has been closed,
+							// it is removed from the monitorList => cause a concurrent modification not prevented by the lock because we
+							// are in the same thread...
+							List<MonitorSession> monitorList2 = new ArrayList<MonitorSession>(monitorList);
+							for (MonitorSession monitor : monitorList2) {
+								for (String c : result) {
+									if (!OpenWebNetConstant.NACK.equalsIgnoreCase(c)) {
+										monitor.monitor(c);
+									}
 								}
 							}
 						}
 					}
+					return result;
+				} else {
+					log.info(ControllerStateManagement.class.getName(), "Error during parsing command [" + command + "]");
+					return new ArrayList<String>();
 				}
-				return result;
-			} else {
 				
-					ControllerDimensionSimulator cdc = controllerDimensionCommandList.get(who);
-					if (cdc != null) {
-						return cdc.status(command);
-					} else {
-						System.out.println("Command not supported [" + command + "]");
-						List<String> result = new ArrayList<String>();
-						result.add(OpenWebNetConstant.NACK);
-						return result;
-					}
-				}
-			}}
+			}
 		} catch (ParseException e) {
-			log.finest(Session.Server, "Error during parsing command [" + command + "]");
+			log.finest(ControllerStateManagement.class.getName(), "Error during parsing command [" + command + "]");
 			e.printStackTrace();
 			List<String> result = new ArrayList<String>();
 			result.add(OpenWebNetConstant.NACK);
 			return result;
 		}
 	}
-	
 }

@@ -46,12 +46,12 @@ public class GatewayModuleActivator implements BundleActivator {
 		
 		context.registerService(GatewayCommand.class.getName(), new GatewayCommand(), dict);
 		
-		ControllerStateManagement.registerControllerDimensionCommand(gatewayModule);
+		ControllerStateManagement.registerControllerCommand(gatewayModule);
 	}
 
 	@Override
 	public void stop(BundleContext arg0) throws Exception {
-		ControllerStateManagement.registerControllerDimensionCommand(gatewayModule);
+		ControllerStateManagement.registerControllerCommand(gatewayModule);
 	}
 	
 	

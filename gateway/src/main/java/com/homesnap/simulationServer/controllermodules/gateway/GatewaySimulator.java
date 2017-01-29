@@ -46,9 +46,9 @@ import com.homesnap.engine.connector.openwebnet.gateway.dimension.Model;
 import com.homesnap.engine.connector.openwebnet.gateway.dimension.Time;
 import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
 import com.homesnap.engine.connector.openwebnet.parser.ParseException;
-import com.homesnap.simulationServer.controllermodules.ControllerDimensionSimulator;
+import com.homesnap.simulationServer.controllermodules.ControllerSimulator;
 
-public class GatewaySimulator implements ControllerDimensionSimulator {
+public class GatewaySimulator implements ControllerSimulator {
 
 	private static final String GATEWAY_ADDRESS = "1";
 	private static Hashtable<String, List<DimensionValue>> dimensionCache = new Hashtable<String, List<DimensionValue>>(); // where-dimension, dimensionList

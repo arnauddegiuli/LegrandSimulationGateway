@@ -48,11 +48,11 @@ public class HomeSnapServerActivator implements BundleActivator {
 		public void run() {
 			try {
 				server = new Server();
+				server.start();
 			} catch (IOException e) {
 				System.out.println("Error during Server creation : "
 						+ e.getMessage());
 			}
-			server.start();
 		}
 		
 	}

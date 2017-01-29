@@ -28,7 +28,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import com.homesnap.engine.Log;
-import com.homesnap.engine.Log.Session;
 
 public class MonitorSession {
 	private Socket client; // liaison avec client
@@ -43,10 +42,10 @@ public class MonitorSession {
 	private void write(String msg) throws IOException {
 		versClient.print(msg);
 		if (versClient.checkError()) {
-			log.severe(Session.Monitor, "ERROR WHEN MONITOR SERVER WRITE: " + msg);
+			log.severe(this.getClass().getSimpleName(), "ERROR WHEN MONITOR SERVER WRITE: " + msg);
 			throw new IOException();
 		} else {
-			log.fine(Session.Monitor, "FROM MONITOR SERVER: " + msg);
+			log.fine(this.getClass().getSimpleName(), "Send to MONITOR client: " + msg);
 		}
 	}
 
@@ -54,17 +53,17 @@ public class MonitorSession {
 		try {
 			write(command);
 		} catch (IOException e) {
-			log.severe(Session.Monitor, "Error with IO : " + e.getMessage());
+			log.severe(this.getClass().getSimpleName(), "Error with IO : " + e.getMessage());
 			stop();
 		}
 	}
 	
 	public void stop() {
 		try {
-			log.fine(Session.Monitor, "End Monitor Session.");
+			log.fine(this.getClass().getSimpleName(), "End Monitor Session.");
 			client.close();
 		} catch (IOException e) {
-			log.severe(Session.Monitor, "Error when closing connection : "
+			log.severe(this.getClass().getSimpleName(), "Error when closing connection : "
 					+ e.getMessage());
 		} finally {
 			ControllerStateManagement.unRegisterMonitorSession(this);

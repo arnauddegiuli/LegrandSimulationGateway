@@ -59,22 +59,35 @@ public class LightSimulator implements ControllerSimulator {
 			if (WhereType.GENERAL == parser.getWhereType()) {
 				// We send command to all correct address
 				for (int i = 11; i < 99; i++) {
-					if (i % 10 != 0) { // group address (20, 30, ..) are not correct
-						updateController(""+i, parser.getWhat());
+					try {
+						if (i % 10 != 0) { // group address (20, 30, ..) are not correct
+							updateController(""+i, parser.getWhat());
+						}
+					} catch (UnknownDeviceException e) {
+						System.out.println(e.getMessage());
 					}
 				}
 			} else if (WhereType.GROUP == parser.getWhereType()) {
 				// We send command to group address
-				// Not supported actually...
+				// TODO Not supported actually...
 			} else if (WhereType.ENVIRONMENT == parser.getWhereType()) {
 				String environment = parser.getEnvironment();
 				// We send ambiance command to address
 				for (int i = 1; i < 9; i++) {
-					updateController(environment + i, parser.getWhat());
+					try {
+						updateController(environment + i, parser.getWhat());
+					} catch (UnknownDeviceException e) {
+						System.out.println(e.getMessage());
+					}
 				}
 			} else {
-				// Command direct on a controller
-				updateController(parser.getWhere(), parser.getWhat());
+				try {
+					// Command direct on a controller
+					updateController(parser.getWhere(), parser.getWhat());
+				} catch (UnknownDeviceException e) {
+					System.out.println(e.getMessage());
+					return OpenWebNetConstant.NACK;
+				}
 			}
 			
 			return OpenWebNetConstant.ACK;
@@ -87,9 +100,6 @@ public class LightSimulator implements ControllerSimulator {
 			return OpenWebNetConstant.NACK;
 		} catch (MissingResourceException e) {
 			System.out.println("Device doesn't exist [" + command + "]");
-			return OpenWebNetConstant.NACK;
-		} catch (UnknownDeviceException e) {
-			System.out.println(e.getMessage());
 			return OpenWebNetConstant.NACK;
 		}
 	}
@@ -121,39 +131,53 @@ public class LightSimulator implements ControllerSimulator {
 				// We send command to all correct address
 				for (int i = 11; i < 100; i++) {
 					if (i % 10 != 0) { // group address (20, 30, ..) are not correct
-						String status = updateStatus(""+i);
-						if (status != null) {
-							result.add(status);
+						try {
+							String status = updateStatus(""+i);
+							if (status != null) {
+								result.add(status);
+							}
+						} catch (UnknownDeviceException e) {
+							System.out.println(e.getMessage());
 						}
+
 					}
 				}
 			} else if (WhereType.GROUP == parser.getWhereType()) {
 				// We send command to group address
-				// Not supported actually...
+				// TODO Not supported actually...
 			} else if (WhereType.ENVIRONMENT == parser.getWhereType()) {
 				String environment = parser.getEnvironment();
 				// We send ambiance command to address
 				for (int i = 1; i < 10; i++) {
-					String status = updateStatus(environment+i);
-					if (status != null) {
-						result.add(status);
+					try {
+						String status = updateStatus(environment+i);
+						if (status != null) {
+							result.add(status);
+						}
+					} catch (UnknownDeviceException e) {
+						System.out.println(e.getMessage());
 					}
 				}
 			} else {
 				// Command direct on a controller
-				String status = updateStatus(where);
-				if (status != null) {
-					result.add(status);
+				String status;
+				try {
+					status = updateStatus(where);
+					if (status != null) {
+						result.add(status);
+					}
+				} catch (UnknownDeviceException e) {
+					System.out.println(e.getMessage());
+					result.add(OpenWebNetConstant.NACK);
+					return result;
 				}
+
 			}
 
 			result.add(OpenWebNetConstant.ACK);
 		} catch (ParseException e) {
 				// TODO Auto-generated catch block
 			e.printStackTrace();
-			result.add(OpenWebNetConstant.NACK);
-		} catch (UnknownDeviceException e) {
-			System.out.println(e.getMessage());
 			result.add(OpenWebNetConstant.NACK);
 		}
 		return result;
