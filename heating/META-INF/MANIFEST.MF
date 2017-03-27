@@ -1,18 +1,18 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: HomeSnapSimulationServerGatewayModule
-Bundle-SymbolicName: com.homesnap.simulationServer.controllermodule.heating
+Bundle-Name: DomoSnapSimulationServerGatewayModule
+Bundle-SymbolicName: com.domosnap.simulationServer.controllermodule.heating
 Bundle-Version: 0.1
-Bundle-Activator: com.homesnap.simulationServer.controllermodules.heating.HeatingModuleActivator
-Import-Package: com.homesnap.engine,
- com.homesnap.engine.connector.openwebnet,
- com.homesnap.engine.connector.openwebnet.heating,
- com.homesnap.engine.connector.openwebnet.heating.dimension,
- com.homesnap.engine.connector.openwebnet.parser,
- com.homesnap.simulationServer,
- com.homesnap.simulationServer.controllermodules,
+Bundle-Activator: com.domosnap.simulationServer.controllermodules.heating.HeatingModuleActivator
+Import-Package: com.domosnap.engine,
+ com.domosnap.engine.connector.openwebnet,
+ com.domosnap.engine.connector.openwebnet.heating,
+ com.domosnap.engine.connector.openwebnet.heating.dimension,
+ com.domosnap.engine.connector.openwebnet.parser,
+ com.domosnap.simulationServer,
+ com.domosnap.simulationServer.controllermodules,
  org.osgi.framework
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Export-Package: com.homesnap.simulationServer.controllermodules.heating
-Require-Bundle: com.homesnap.engine, com.homesnap.simulationServer
+Export-Package: com.domosnap.simulationServer.controllermodules.heating
+Require-Bundle: com.domosnap.engine, com.domosnap.simulationServer

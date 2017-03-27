@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.homesnap.simulationServer.controllermodules</groupId>
+	<groupId>com.domosnap.simulationServer.controllermodules</groupId>
 	<artifactId>heating</artifactId>
 	<packaging>bundle</packaging>
-	<name>HomeSnap Legrand Simulation Gateway HeatingModule</name>
-	<description>Home Snap virtual server pluggin heating device</description>
+	<name>DomoSnap Legrand Simulation Gateway HeatingModule</name>
+	<description>DomoSnap virtual server pluggin heating device</description>
 
 	<parent>
-		<groupId>com.homesnap.simulationServer</groupId>
+		<groupId>com.domosnap.simulationServer</groupId>
 		<artifactId>LegrandSimulationGatewayProject</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
@@ -28,18 +28,18 @@
 						<Bundle-Description>${project.description}</Bundle-Description>
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
 						<Bundle-Version>${project.version}</Bundle-Version>
-						<Bundle-Activator>com.homesnap.simulationServer.controllermodules.heating.HeatingModuleActivator</Bundle-Activator>
-						<Import-Package>com.homesnap.engine,
-							 com.homesnap.engine.connector.openwebnet,
-							 com.homesnap.engine.connector.openwebnet.parser,
-							 com.homesnap.engine.connector.openwebnet.heating,
-							 com.homesnap.engine.connector.openwebnet.heating.dimension,
-							 com.homesnap.simulationServer,
-							 com.homesnap.simulationServer.controllermodules,
+						<Bundle-Activator>com.domosnap.simulationServer.controllermodules.heating.HeatingModuleActivator</Bundle-Activator>
+						<Import-Package>com.domosnap.engine,
+							 com.domosnap.engine.connector.openwebnet,
+							 com.domosnap.engine.connector.openwebnet.parser,
+							 com.domosnap.engine.connector.openwebnet.heating,
+							 com.domosnap.engine.connector.openwebnet.heating.dimension,
+							 com.domosnap.simulationServer,
+							 com.domosnap.simulationServer.controllermodules,
 							 org.osgi.framework
  						</Import-Package>
-						<Export-Package>com.homesnap.simulationServer.controllermodules.heating</Export-Package>
-						<Require-Bundle>com.homesnap.engine, com.homesnap.simulationServer</Require-Bundle>
+						<Export-Package>com.domosnap.simulationServer.controllermodules.heating</Export-Package>
+						<Require-Bundle>com.domosnap.engine, com.domosnap.simulationServer</Require-Bundle>
 					</instructions>
 				</configuration>
 			</plugin>
@@ -110,17 +110,17 @@
 	<!-- Dependecies Management -->
 	<dependencies>
 		<dependency>
-			<groupId>com.homesnap</groupId>
+			<groupId>com.domosnap</groupId>
 			<artifactId>engine</artifactId>
 			<version>${engine.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.homesnap.simulationServer.controllermodules</groupId>
+			<groupId>com.domosnap.simulationServer.controllermodules</groupId>
 			<artifactId>commandmodules</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.homesnap.simulationServer</groupId>
+			<groupId>com.domosnap.simulationServer</groupId>
 			<artifactId>server</artifactId>
 			<version>${project.version}</version>
 		</dependency>

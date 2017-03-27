@@ -3,9 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.homesnap.simulationServer</groupId>
+	<groupId>com.domosnap.simulationServer</groupId>
 	<artifactId>LegrandSimulationGatewayProject</artifactId>
-	<name>HomeSnap Legrand Simulation Gateway</name>
+	<name>DomoSnap Legrand Simulation Gateway</name>
         <version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
@@ -22,7 +22,7 @@
 	<properties>
 	    <licence.plugin.version>1.7</licence.plugin.version>
 	    <file.encoding>UTF-8</file.encoding>
-	    <engine.version>0.0.5</engine.version>
+	    <engine.version>0.0.19</engine.version>
 	</properties>
 
 	<dependencyManagement>

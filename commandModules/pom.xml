@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.homesnap.simulationServer.controllermodules</groupId>
+	<groupId>com.domosnap.simulationServer.controllermodules</groupId>
 	<artifactId>commandmodules</artifactId>
 	<packaging>bundle</packaging>
-	<name>HomeSnap Legrand Simulation Gateway Interfaces</name>
+	<name>DomoSnap Legrand Simulation Gateway Interfaces</name>
 	<description>My Home virtual server pluggin interfaces</description>
 
 	<parent>
-		<groupId>com.homesnap.simulationServer</groupId>
+		<groupId>com.domosnap.simulationServer</groupId>
 		<artifactId>LegrandSimulationGatewayProject</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
@@ -28,9 +28,9 @@
 						<Bundle-Description>${project.description}</Bundle-Description>
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
 						<Bundle-Version>${project.version}</Bundle-Version>
-						<Import-Package>com.homesnap.engine.controller,
+						<Import-Package>com.domosnap.engine.controller,
 							org.osgi.framework</Import-Package>
-						<Export-Package>com.homesnap.simulationServer.controllermodules</Export-Package>
+						<Export-Package>com.domosnap.simulationServer.controllermodules</Export-Package>
 					</instructions>
 				</configuration>
 			</plugin>
@@ -103,7 +103,7 @@
 	<!-- Dependecies Management -->
 	<dependencies>
 		<dependency>
-			<groupId>com.homesnap</groupId>
+			<groupId>com.domosnap</groupId>
 			<artifactId>engine</artifactId>
 			<version>${engine.version}</version>
 		</dependency>

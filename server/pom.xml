@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>server</artifactId>
 	<packaging>bundle</packaging>
-	<name>HomeSnap Legrand Simulation Gateway Server</name>
-	<description>Home Snap virtual server to test the HomeSnap project</description>
+	<name>DomoSnap Legrand Simulation Gateway Server</name>
+	<description>DomoSnap virtual server to test the HomeSnap project</description>
 
 	<parent>
-		<groupId>com.homesnap.simulationServer</groupId>
+		<groupId>com.domosnap.simulationServer</groupId>
 		<artifactId>LegrandSimulationGatewayProject</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
@@ -27,16 +27,16 @@
 						<Bundle-Description>${project.description}</Bundle-Description>
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
 						<Bundle-Version>0.1</Bundle-Version>
-						<Bundle-Activator>com.homesnap.simulationServer.HomeSnapServerActivator</Bundle-Activator>
+						<Bundle-Activator>com.domosnap.simulationServer.HomeSnapServerActivator</Bundle-Activator>
 						<Import-Package>
-							com.homesnap.engine,
-							com.homesnap.engine.connector.openwebnet,
-							com.homesnap.engine.connector.openwebnet.parser,
-							com.homesnap.simulationServer.controllermodules,
+							com.domosnap.engine,
+							com.domosnap.engine.connector.openwebnet,
+							com.domosnap.engine.connector.openwebnet.parser,
+							com.domosnap.simulationServer.controllermodules,
 							org.osgi.framework
 						</Import-Package>
-						<Export-Package>com.homesnap.simulationServer</Export-Package>
-						<Require-Bundle>com.homesnap.engine</Require-Bundle>
+						<Export-Package>com.domosnap.simulationServer</Export-Package>
+						<Require-Bundle>com.domosnap.engine</Require-Bundle>
 					</instructions>
 				</configuration>
 			</plugin>
@@ -109,12 +109,12 @@
 	<!-- Dependecies Management -->
 	<dependencies>
 		<dependency>
-			<groupId>com.homesnap</groupId>
+			<groupId>com.domosnap</groupId>
 			<artifactId>engine</artifactId>
 			<version>${engine.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.homesnap.simulationServer.controllermodules</groupId>
+			<groupId>com.domosnap.simulationServer.controllermodules</groupId>
 			<artifactId>commandmodules</artifactId>
 			<version>${project.version}</version>
 		</dependency>
