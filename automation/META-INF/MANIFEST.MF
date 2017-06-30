@@ -5,8 +5,8 @@ Bundle-SymbolicName: com.domosnap.simulationServer.controllermodules.automation
 Bundle-Version: 0.1
 Bundle-Activator: com.domosnap.simulationServer.controllermodules.automation.AutomationModuleActivator
 Import-Package: com.domosnap.engine,
- com.domosnap.engine.connector.openwebnet,
- com.domosnap.engine.connector.openwebnet.parser,
+ com.domosnap.engine.connector.impl.openwebnet,
+ com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser,
  com.domosnap.engine.controller.automation,
  com.domosnap.simulationServer,
  com.domosnap.simulationServer.controllermodules,

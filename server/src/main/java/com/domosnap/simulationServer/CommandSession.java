@@ -31,8 +31,8 @@ import java.net.Socket;
 import java.util.List;
 
 import com.domosnap.engine.Log;
-import com.domosnap.engine.connector.openwebnet.convert.OpenWebNetCommand;
-import com.domosnap.engine.connector.openwebnet.parser.ParseException;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.core.OpenWebNetCommand;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.ParseException;
 
 public class CommandSession {
 	private Socket client; // liaison avec client

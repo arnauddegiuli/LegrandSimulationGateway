@@ -30,11 +30,11 @@
 						<Bundle-Version>${project.version}</Bundle-Version>
 						<Bundle-Activator>com.domosnap.simulationServer.controllermodules.light.LightModuleActivator</Bundle-Activator>
 						<Import-Package>com.domosnap.engine,
-							 com.domosnap.engine.connector.openwebnet,
-							 com.domosnap.engine.connector.openwebnet.parser,
+							 com.domosnap.engine.connector.impl.openwebnet,
+							 com.domosnap.engine.connector.impl.openwebnet.conversion.light,
+							 com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser,
 							 com.domosnap.simulationServer,
 							 com.domosnap.simulationServer.controllermodules,
-							 com.domosnap.engine.connector.openwebnet.light,
 							 org.osgi.framework
  						</Import-Package>
 						<Export-Package>com.domosnap.simulationServer.controllermodules.light</Export-Package>

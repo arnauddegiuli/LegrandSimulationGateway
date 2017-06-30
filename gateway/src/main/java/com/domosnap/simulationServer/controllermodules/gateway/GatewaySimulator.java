@@ -34,18 +34,18 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 
-import com.domosnap.engine.connector.openwebnet.OpenWebNetConstant;
-import com.domosnap.engine.connector.openwebnet.dimension.DimensionValue;
-import com.domosnap.engine.connector.openwebnet.gateway.GatewayStatusConverter;
-import com.domosnap.engine.connector.openwebnet.gateway.dimension.DateTime;
-import com.domosnap.engine.connector.openwebnet.gateway.dimension.DistributionVersion;
-import com.domosnap.engine.connector.openwebnet.gateway.dimension.FirmwareVersion;
-import com.domosnap.engine.connector.openwebnet.gateway.dimension.IpAddress;
-import com.domosnap.engine.connector.openwebnet.gateway.dimension.MacAddress;
-import com.domosnap.engine.connector.openwebnet.gateway.dimension.Model;
-import com.domosnap.engine.connector.openwebnet.gateway.dimension.Time;
-import com.domosnap.engine.connector.openwebnet.parser.CommandParser;
-import com.domosnap.engine.connector.openwebnet.parser.ParseException;
+import com.domosnap.engine.connector.impl.openwebnet.connector.OpenWebNetConstant;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.core.dimension.DimensionValue;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.CommandParser;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.ParseException;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.gateway.GatewayStatusConverter;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.gateway.dimension.DateTime;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.gateway.dimension.DistributionVersion;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.gateway.dimension.FirmwareVersion;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.gateway.dimension.IpAddress;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.gateway.dimension.MacAddress;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.gateway.dimension.Model;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.gateway.dimension.Time;
 import com.domosnap.simulationServer.controllermodules.ControllerSimulator;
 
 public class GatewaySimulator implements ControllerSimulator {
@@ -194,7 +194,7 @@ public class GatewaySimulator implements ControllerSimulator {
 				t.setTime(new Date());
 				dimensionList = t.getValueList();
 			} else if (GatewayStatusConverter.GatewayDimension.DATE.getCode().equals(dimensionStr)) {
-				com.domosnap.engine.connector.openwebnet.gateway.dimension.Date d = new com.domosnap.engine.connector.openwebnet.gateway.dimension.Date();
+				com.domosnap.engine.connector.impl.openwebnet.conversion.gateway.dimension.Date d = new com.domosnap.engine.connector.impl.openwebnet.conversion.gateway.dimension.Date();
 				d.setDate(new Date());
 				dimensionList = d.getValueList();
 			} else if (GatewayStatusConverter.GatewayDimension.DATETIME.getCode().equals(

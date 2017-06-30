@@ -32,8 +32,8 @@
 						<Bundle-Activator>com.domosnap.simulationServer.controllermodules.automation.AutomationModuleActivator</Bundle-Activator>
 						<Import-Package> com.domosnap.engine,
 							 com.domosnap.engine.controller,
-							 com.domosnap.engine.connector.openwebnet,
-							 com.domosnap.engine.connector.openwebnet.parser,
+							 com.domosnap.engine.connector.impl.openwebnet,
+							 com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser,
 							 com.homesnap.simulationServer,
 							 com.homesnap.simulationServer.controllermodules,
 							 com.domosnap.engine.controller.automation,

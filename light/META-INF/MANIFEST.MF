@@ -5,9 +5,9 @@ Bundle-SymbolicName: com.domosnap.simulationServer.controllermodules.light
 Bundle-Version: 0.1
 Bundle-Activator: com.domosnap.simulationServer.controllermodules.light.LightModuleActivator
 Import-Package: com.domosnap.engine,
- com.domosnap.engine.connector.openwebnet,
- com.domosnap.engine.connector.openwebnet.light,
- com.domosnap.engine.connector.openwebnet.parser,
+ com.domosnap.engine.connector.impl.openwebnet,
+ com.domosnap.engine.connector.impl.openwebnet.conversion.light,
+ com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser,
  com.domosnap.simulationServer,
  com.domosnap.simulationServer.controllermodules,
  org.osgi.framework

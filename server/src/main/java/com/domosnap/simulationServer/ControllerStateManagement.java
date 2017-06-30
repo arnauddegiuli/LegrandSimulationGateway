@@ -28,9 +28,9 @@ import java.util.Hashtable;
 import java.util.List;
 
 import com.domosnap.engine.Log;
-import com.domosnap.engine.connector.openwebnet.OpenWebNetConstant;
-import com.domosnap.engine.connector.openwebnet.parser.CommandParser;
-import com.domosnap.engine.connector.openwebnet.parser.ParseException;
+import com.domosnap.engine.connector.impl.openwebnet.connector.OpenWebNetConstant;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.CommandParser;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.ParseException;
 import com.domosnap.simulationServer.controllermodules.ControllerSimulator;
 
 public class ControllerStateManagement {

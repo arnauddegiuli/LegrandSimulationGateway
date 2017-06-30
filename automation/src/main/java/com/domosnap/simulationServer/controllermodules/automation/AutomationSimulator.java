@@ -28,11 +28,11 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.domosnap.engine.connector.openwebnet.OpenWebNetConstant;
-import com.domosnap.engine.connector.openwebnet.WhereType;
-import com.domosnap.engine.connector.openwebnet.automation.AutomationStatusConverter;
-import com.domosnap.engine.connector.openwebnet.parser.CommandParser;
-import com.domosnap.engine.connector.openwebnet.parser.ParseException;
+import com.domosnap.engine.connector.impl.openwebnet.connector.OpenWebNetConstant;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.automation.AutomationStatusConverter;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.core.WhereType;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.CommandParser;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.ParseException;
 import com.domosnap.engine.controller.who.Who;
 import com.domosnap.simulationServer.controllermodules.ControllerSimulator;
 import com.domosnap.simulationServer.controllermodules.StatusManager;
@@ -117,7 +117,14 @@ public class AutomationSimulator implements ControllerSimulator {
 				// We send command to all correct address
 				for (int i = 11; i < 100; i++) {
 					if (i % 10 != 0) { // group address (20, 30, ..) are not correct
-						result.add(updateStatus(""+i));
+						try {
+							String status = updateStatus(""+i);
+							if (status != null) {
+								result.add(status);
+							}
+						} catch (UnknownDeviceException e) {
+							System.out.println(e.getMessage());
+						}
 					}
 				}
 			} else if (WhereType.GROUP == parser.getWhereType()) {
@@ -127,20 +134,33 @@ public class AutomationSimulator implements ControllerSimulator {
 				String environment = parser.getEnvironment();
 				// We send ambiance command to address
 				for (int i = 1; i < 10; i++) {
-					result.add(updateStatus(environment + i));
+					try {
+						String status = updateStatus(environment+i);
+						if (status != null) {
+							result.add(status);
+						}
+					} catch (UnknownDeviceException e) {
+						System.out.println(e.getMessage());
+					}
 				}
 			} else {
 				// Command direct on a controller
-				result.add(updateStatus(where));
+				String status;
+				try {
+					status = updateStatus(where);
+					if (status != null) {
+						result.add(status);
+					}
+				} catch (UnknownDeviceException e) {
+					System.out.println(e.getMessage());
+					result.add(OpenWebNetConstant.NACK);
+					return result;
+				}
 			}
 
 			result.add(OpenWebNetConstant.ACK);
 		} catch (ParseException e) {
-			System.out.println("Unexpected error during parsing command ["+ command +"] (probably unsupported command or feature from the command):");
-			e.printStackTrace();
-			result.add(OpenWebNetConstant.NACK);
-		} catch (UnknownDeviceException e) {
-			System.out.println(e.getMessage());
+			System.out.println("Unexpected error during parsing command ["+ command +"] (probably unsupported command or feature from the command)");
 			result.add(OpenWebNetConstant.NACK);
 		}
 		return result;

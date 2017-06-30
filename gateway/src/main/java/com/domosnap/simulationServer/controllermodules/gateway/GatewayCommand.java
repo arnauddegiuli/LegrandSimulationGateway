@@ -29,10 +29,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import com.domosnap.engine.connector.openwebnet.OpenWebNetConstant;
-import com.domosnap.engine.connector.openwebnet.dimension.DimensionValue;
-import com.domosnap.engine.connector.openwebnet.gateway.GatewayStatusConverter;
-import com.domosnap.engine.connector.openwebnet.gateway.dimension.Date;
+import com.domosnap.engine.connector.impl.openwebnet.connector.OpenWebNetConstant;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.core.dimension.DimensionValue;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.gateway.GatewayStatusConverter;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.gateway.dimension.Date;
 import com.domosnap.engine.controller.what.impl.DateState;
 import com.domosnap.simulationServer.ControllerStateManagement;
 

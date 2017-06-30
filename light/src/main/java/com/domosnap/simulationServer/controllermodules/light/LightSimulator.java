@@ -29,11 +29,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
 
-import com.domosnap.engine.connector.openwebnet.OpenWebNetConstant;
-import com.domosnap.engine.connector.openwebnet.WhereType;
-import com.domosnap.engine.connector.openwebnet.light.LightStatusConverter;
-import com.domosnap.engine.connector.openwebnet.parser.CommandParser;
-import com.domosnap.engine.connector.openwebnet.parser.ParseException;
+import com.domosnap.engine.connector.impl.openwebnet.connector.OpenWebNetConstant;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.core.WhereType;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.CommandParser;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.ParseException;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.light.LightStatusConverter;
 import com.domosnap.engine.controller.who.Who;
 import com.domosnap.simulationServer.controllermodules.ControllerSimulator;
 import com.domosnap.simulationServer.controllermodules.StatusManager;
@@ -176,8 +176,7 @@ public class LightSimulator implements ControllerSimulator {
 
 			result.add(OpenWebNetConstant.ACK);
 		} catch (ParseException e) {
-				// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Unexpected error during parsing command ["+ command +"] (probably unsupported command or feature from the command)");
 			result.add(OpenWebNetConstant.NACK);
 		}
 		return result;

@@ -30,9 +30,9 @@
 						<Bundle-Version>${project.version}</Bundle-Version>
 						<Bundle-Activator>com.domosnap.simulationServer.controllermodules.gateway.GatewayModuleActivator</Bundle-Activator>
 						<Import-Package> com.domosnap.engine,
-							 com.domosnap.engine.connector.openwebnet,
+							 com.domosnap.engine.connector.impl.openwebnet,
 							 com.domosnap.simulationServer,
-							 com.domosnap.engine.connector.openwebnet.gateway,
+							 com.domosnap.engine.connector.impl.openwebnet.conversion.gateway,
 							 com.domosnap.simulationServer.controllermodules,
 							 org.osgi.framework
  						</Import-Package>

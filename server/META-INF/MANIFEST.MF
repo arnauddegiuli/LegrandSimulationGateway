@@ -9,8 +9,8 @@ Require-Bundle: com.domosnap.engine
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  JavaSE-1.7
 Import-Package: com.domosnap.engine,
- com.domosnap.engine.connector.openwebnet,
- com.domosnap.engine.connector.openwebnet.parser,
+ com.domosnap.engine.connector.impl.openwebnet,
+ com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser,
  com.domosnap.simulationServer.controllermodules,
  org.osgi.framework
 Bundle-ActivationPolicy: lazy
