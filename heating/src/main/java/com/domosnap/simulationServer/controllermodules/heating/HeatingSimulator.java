@@ -1,6 +1,4 @@
 package com.domosnap.simulationServer.controllermodules.heating;
-//package com.domosnap.simulationServer.controllermodules.heating;
-//
 /*
  * #%L
  * DomoSnap Legrand Simulation Gateway HeatingModule
@@ -23,129 +21,231 @@ package com.domosnap.simulationServer.controllermodules.heating;
  *     along with MyDomo.  If not, see <http://www.gnu.org/licenses/>.
  * #L%
  */
-//
-//
-//import java.text.MessageFormat;
-//import java.util.ArrayList;
-//import java.util.Hashtable;
-//import java.util.List;
-//
-//import com.homesnap.engine.connector.openwebnet.OpenWebNetConstant;
-//import com.homesnap.engine.connector.openwebnet.convert.OpenWebNetConverterRegistry;
-//import com.homesnap.engine.connector.openwebnet.dimension.DimensionValue;
-//import com.homesnap.engine.connector.openwebnet.heating.HeatingZoneDimension;
-//import com.homesnap.engine.connector.openwebnet.heating.ValveStatusEnum;
-//import com.homesnap.engine.connector.openwebnet.heating.dimension.DesiredTemperature;
-//import com.homesnap.engine.connector.openwebnet.heating.dimension.MeasureTemperature;
-//import com.homesnap.engine.connector.openwebnet.heating.dimension.ProbeStatus;
-//import com.homesnap.engine.connector.openwebnet.heating.dimension.SetOffset;
-//import com.homesnap.engine.connector.openwebnet.heating.dimension.ValvesStatus;
-//import com.homesnap.engine.connector.openwebnet.parser.CommandParser;
-//import com.homesnap.engine.connector.openwebnet.parser.ParseException;
-//import com.homesnap.engine.controller.heating.stateValue.Offset;
-//import com.homesnap.engine.controller.heating.stateValue.Offset.Mode;
-//import com.domosnap.simulationServer.controllermodules.ControllerDimensionSimulator;
-//
-//public class HeatingSimulator implements ControllerDimensionSimulator {
-//
-//	
+
+
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.MissingResourceException;
+
+import com.domosnap.engine.connector.impl.openwebnet.connector.OpenWebNetConstant;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.core.WhereType;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.core.dimension.DimensionValue;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.CommandParser;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.ParseException;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.heating.HeatingZoneConverter;
+import com.domosnap.engine.controller.who.Who;
+import com.domosnap.simulationServer.controllermodules.ControllerSimulator;
+import com.domosnap.simulationServer.controllermodules.DimensionManager;
+import com.domosnap.simulationServer.controllermodules.StatusManager;
+import com.domosnap.simulationServer.controllermodules.UnknownDeviceException;
+
+public class HeatingSimulator implements ControllerSimulator {
+
+	
 //	private static Hashtable<String, List<DimensionValue>> dimensionCache = new Hashtable<String, List<DimensionValue>>(); // where-dimension, dimensionList
-//	
-//	@Override
-//	public String execute(String command) {
-//		try {
-//			CommandParser parser = CommandParser.parse(command);
-//			String dimensionStr = parser.getDimension();
-//			String where = parser.getWhere();
-//			if (HeatingZoneDimension.SET_TEMPERATURE.getCode().equals(dimensionStr) ||
-//				HeatingZoneDimension.LOCAL_OFFSET.getCode().equals(dimensionStr) ||
-//				HeatingZoneDimension.MEASURE_TEMPERATURE.getCode().equals(dimensionStr) ||
-//				HeatingZoneDimension.PROBE_STATUS.getCode().equals(dimensionStr) ||
-//				HeatingZoneDimension.VALVE_STATUS.getCode().equals(dimensionStr)) {
-//				
-//				dimensionCache.put(where
-//						+ "-" + dimensionStr, parser.getDimensionList());
-//				return OpenWebNetConstant.ACK;
+	
+	private static StatusManager statusList;
+	private static DimensionManager dimensionListManager;
+
+	public HeatingSimulator(StatusManager statusList, DimensionManager sm) {
+		HeatingSimulator.statusList = statusList;
+		dimensionListManager = sm;
+	}
+	
+	public static void setStatusManager(DimensionManager dimensionListManager) {
+		HeatingSimulator.dimensionListManager = dimensionListManager;
+	}
+	
+	@Override
+	public String execute(String command) {
+		try {
+			CommandParser parser = CommandParser.parse(command);
+
+//			if (WhereType.GENERAL == parser.getWhereType()) {
+//				// We send command to all correct address
+//				for (int i = 11; i < 99; i++) {
+//					try {
+//						if (i % 10 != 0) { // group address (20, 30, ..) are not correct
+//							updateController(""+i, parser);
+//						}
+//					} catch (UnknownDeviceException e) {
+//						System.out.println(e.getMessage());
+//					}
+//				}
+//			} else if (WhereType.GROUP == parser.getWhereType()) {
+//				// We send command to group address
+//				// TODO Not supported actually...
+//			} else if (WhereType.ENVIRONMENT == parser.getWhereType()) {
+//				String environment = parser.getEnvironment();
+//				// We send ambiance command to address
+//				for (int i = 1; i < 9; i++) {
+//					try {
+//						updateController(environment + i, parser);
+//					} catch (UnknownDeviceException e) {
+//						System.out.println(e.getMessage());
+//					}
+//				}
 //			} else {
-//				return OpenWebNetConstant.NACK;
+				// Command direct on a controller
+				updateController(parser.getWhere(), parser);
 //			}
-//		} catch (ParseException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//				return null;
-//		}
-//	}
-//
-//	@Override
-//	public String status(String command) {
-//		try {
-//			CommandParser parser = CommandParser.parse(command);
-//			String where = parser.getWhere();
-//			String dimensionStr = parser.getDimension();
-//			List<DimensionValue> dimensionList;
-//			if (HeatingZoneDimension.SET_TEMPERATURE.getCode().equals(dimensionStr)) {
-//				
-//				dimensionList = dimensionCache.get(where
-//						+ "-" + dimensionStr);
-//				if (dimensionList == null) {
-//					DesiredTemperature dt = new DesiredTemperature();
-//					dt.setDesiredTemperature(21d);
-//					dt.setMode(3); // Generic mode
-//					dimensionList = dt.getValueList();
-//					dimensionCache.put(where + "-" + dimensionStr, dimensionList);
+			
+			return OpenWebNetConstant.ACK;
+
+		} catch (ParseException e) {
+			System.out.println("Command not supported [" + command + "]");
+			return OpenWebNetConstant.NACK;
+		} catch (UnknownDeviceException e) {
+			System.out.println(e.getMessage());
+			return OpenWebNetConstant.NACK;
+		} catch (UnsupportedOperationException e) {
+			System.out.println("Command not supported [" + command + "]");
+			return OpenWebNetConstant.NACK;
+		} catch (MissingResourceException e) {
+			System.out.println("Device doesn't exist [" + command + "]");
+			return OpenWebNetConstant.NACK;
+		}
+	}
+	
+	private void updateController(String where, CommandParser parser) throws UnknownDeviceException {
+		
+		String what = parser.getWhat();
+		if (what != null) { // status
+			if (!statusList.containsKey(where)) {
+				throw new UnknownDeviceException(Who.HEATING_ADJUSTMENT, where, null);
+			}
+			
+			if (HeatingZoneConverter.HeatingZoneStatus.HEATING_MODE.getCode().equals(what)
+					|| HeatingZoneConverter.HeatingZoneStatus.HEATING_OFF.getCode().equals(what)
+					|| HeatingZoneConverter.HeatingZoneStatus.THERMAL_PROTECTION.getCode().equals(what)
+					) {
+				statusList.put(where, what);
+				
+			} else {
+				throw new UnsupportedOperationException("Command not supported [" + where + ":" + what +  "]");
+			}
+		} else { // dimension
+			String dimension = parser.getDimension();
+			List<DimensionValue> dimensionList = parser.getDimensionList();
+
+			String id = where + "-" + dimension;
+			if (!dimensionListManager.containsKey(id)) {
+				throw new UnknownDeviceException(Who.HEATING_ADJUSTMENT, where, null);
+			}
+			
+			if (HeatingZoneConverter.HeatingZoneDimension.MEASURE_TEMPERATURE.getCode().equals(dimension)
+					|| HeatingZoneConverter.HeatingZoneDimension.SET_TEMPERATURE.getCode().equals(dimension)
+					|| HeatingZoneConverter.HeatingZoneDimension.LOCAL_OFFSET.getCode().equals(dimension)
+					) {
+				dimensionListManager.put(id, dimensionList);
+				
+			} else {
+				throw new UnsupportedOperationException("Command not supported [" + where + ":" + dimension +  "]");
+			}
+		}
+	}
+
+	@Override
+	public List<String> status(String command) {
+		List<String> result = new ArrayList<String>();
+		try {
+			CommandParser parser = CommandParser.parse(command);
+			
+//			if (WhereType.GENERAL == parser.getWhereType()) {
+//				// We send command to all correct address
+//				for (int i = 11; i < 100; i++) {
+//					if (i % 10 != 0) { // group address (20, 30, ..) are not correct
+//						try {
+//							String status = updateStatus(""+i, parser);
+//							if (status != null) {
+//								result.add(status);
+//							}
+//						} catch (UnknownDeviceException e) {
+//							System.out.println(e.getMessage());
+//						}
+//					}
 //				}
-//			} else if (HeatingZoneDimension.LOCAL_OFFSET.getCode().equals(dimensionStr)) {
-//				dimensionList = dimensionCache.get(where
-//						+ "-" + dimensionStr);
-//				if (dimensionList == null) {
-//					SetOffset so = new SetOffset();
-//					so.setLocalOffset(new Offset(Mode.OFF, 0));
-//					dimensionList = so.getValueList();
-//					dimensionCache.put(where + "-" + dimensionStr, dimensionList);
+//			} else if (WhereType.GROUP == parser.getWhereType()) {
+//				// We send command to group address
+//				// TODO Not supported actually...
+//			} else if (WhereType.ENVIRONMENT == parser.getWhereType()) {
+//				String environment = parser.getEnvironment();
+//				// We send ambiance command to address
+//				for (int i = 1; i < 10; i++) {
+//					try {
+//						String status = updateStatus(environment+i, parser);
+//						if (status != null) {
+//							result.add(status);
+//						}
+//					} catch (UnknownDeviceException e) {
+//						System.out.println(e.getMessage());
+//					}
 //				}
-//			} else if (HeatingZoneDimension.MEASURE_TEMPERATURE.getCode().equals(
-//					dimensionStr)) {
-//				MeasureTemperature mt = new MeasureTemperature();
-//				mt.setMeasuredTemperature(18d);
-//				dimensionList = mt.getValueList();
-//			} else if (HeatingZoneDimension.PROBE_STATUS.getCode().equals(
-//					dimensionStr)) {
-//				// TODO
-//				ProbeStatus ps = new ProbeStatus();
-//				dimensionList = null;
-//			} else if (HeatingZoneDimension.VALVE_STATUS.getCode().equals(
-//					dimensionStr)) {
-//				ValvesStatus vs = new ValvesStatus();
-//				vs.setHeatingValveStatus(ValveStatusEnum.OFF);
-//				vs.setConditioningValveStatus(ValveStatusEnum.OFF);
-//				dimensionList = vs.getValueList();
-//			}  else {
-//				return OpenWebNetConstant.NACK;
+//			} else {
+				// Command direct on a controller
+				String status;
+				try {
+					status = updateStatus(parser.getWhere(), parser);
+					if (status != null) {
+						result.add(status);
+					}
+				} catch (UnknownDeviceException e) {
+					System.out.println(e.getMessage());
+					result.add(OpenWebNetConstant.NACK);
+					return result;
+				}
+
 //			}
-//	
-//			if (dimensionList == null) {
-//				dimensionList = new ArrayList<DimensionValue>();
-//				dimensionCache.put(where + "-"
-//						+ dimensionStr, dimensionList);
-//			}
-//			StringBuilder sb = new StringBuilder();
-//			for (DimensionValue dimension : dimensionList) {
-//				sb.append(dimension.getValue());
-//				sb.append(OpenWebNetConstant.DIMENSION_SEPARATOR);
-//			}
-//			sb.setLength(sb.length() - 1);
-//			return MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {
-//					getWho(), where, dimensionStr, sb.toString() })
-//					+ OpenWebNetConstant.ACK;
-//		} catch (ParseException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//				return null;
-//		}
-//	}
-//
-//	@Override
-//	public String getWho() {
-//		return OpenWebNetConverterRegistry.WHO_HEATING_ADJUSTMENT.getValue();
-//	}	
-//}
+
+			result.add(OpenWebNetConstant.ACK);
+		} catch (ParseException e) {
+			System.out.println("Unexpected error during parsing command ["+ command +"] (probably unsupported command or feature from the command)");
+			result.add(OpenWebNetConstant.NACK);
+		}
+		return result;
+	}
+	
+	private String updateStatus(String where, CommandParser parser) throws UnknownDeviceException {
+		
+		String dimension = parser.getDimension();
+		if (dimension == null) { // status
+			if (!statusList.containsKey(where)) {
+				throw new UnknownDeviceException(Who.HEATING_ADJUSTMENT, where, null);
+			}
+			String what = statusList.get(where);
+			return what == null ? null : MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {getWho(), what, where} );
+		} else { //dimension
+
+			String id = where + "-" + dimension;
+			if (!dimensionListManager.containsKey(id)) {
+				throw new UnknownDeviceException(Who.HEATING_ADJUSTMENT, where, null);
+			}
+			
+			if (HeatingZoneConverter.HeatingZoneDimension.MEASURE_TEMPERATURE.getCode().equals(dimension)
+					|| HeatingZoneConverter.HeatingZoneDimension.SET_TEMPERATURE.getCode().equals(dimension)
+					|| HeatingZoneConverter.HeatingZoneDimension.LOCAL_OFFSET.getCode().equals(dimension)
+					) {
+				List<DimensionValue> dimensionList = dimensionListManager.get(where + "-" + dimension);
+				
+				StringBuilder sb = new StringBuilder();
+				for (DimensionValue dv : dimensionList) {
+					sb.append(dv.getValue());
+					sb.append(OpenWebNetConstant.DIMENSION_SEPARATOR);
+				}
+				sb.setLength(sb.length() - 1);
+				return MessageFormat.format(OpenWebNetConstant.DIMENSION_COMMAND, new Object[] {
+						getWho(), where, dimension, sb.toString() });
+			} else {
+				throw new UnsupportedOperationException("Command not supported [" + where + ":" + dimension +  "]");
+			}
+			
+			
+		}
+	}
+
+	@Override
+	public String getWho() {
+		return HeatingZoneConverter.OPEN_WEB_WHO;
+	}	
+}

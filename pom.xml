@@ -22,7 +22,7 @@
 	<properties>
 	    <licence.plugin.version>1.7</licence.plugin.version>
 	    <file.encoding>UTF-8</file.encoding>
-	    <engine.version>0.1.2</engine.version>
+	    <engine.version>0.1.3</engine.version>
 	</properties>
 
 	<dependencyManagement>

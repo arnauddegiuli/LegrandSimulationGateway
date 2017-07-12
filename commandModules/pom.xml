@@ -29,6 +29,7 @@
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
 						<Bundle-Version>${project.version}</Bundle-Version>
 						<Import-Package>com.domosnap.engine.controller,
+							com.domosnap.engine.connector.impl.openwebnet.conversion.core.dimension,
 							org.osgi.framework</Import-Package>
 						<Export-Package>com.domosnap.simulationServer.controllermodules</Export-Package>
 					</instructions>

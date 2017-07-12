@@ -31,27 +31,29 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 import com.domosnap.simulationServer.ControllerStateManagement;
+import com.domosnap.simulationServer.controllermodules.DimensionManager;
+import com.domosnap.simulationServer.controllermodules.StatusManager;
 
 public class HeatingModuleActivator implements BundleActivator {
 
-//	private HeatingSimulator heatingModule = new HeatingSimulator();
+	private HeatingSimulator heatingModule;
 	
 	@Override
 	public void start(BundleContext context) throws Exception {
+		heatingModule = new HeatingSimulator(new StatusManager(context.getBundle().getResource("heatingstatus.properties").openConnection().getInputStream()), new DimensionManager(context.getBundle().getResource("heatingdimension.properties").openConnection().getInputStream()));
+		Dictionary<String, Object> dict = new Hashtable<String, Object>();
+		dict.put("osgi.command.scope", "heating");
+		dict.put("osgi.command.function", HeatingCommand.functions);
+
 		
-//		Dictionary<String, Object> dict = new Hashtable<String, Object>();
-//		dict.put("osgi.command.scope", "heating");
-//		dict.put("osgi.command.function", HeatingCommand.functions);
-//
-//		
-//		context.registerService(HeatingCommand.class.getName(), new HeatingCommand(), dict);
-//		
-//		ControllerStateManagement.registerControllerDimensionCommand(heatingModule);
+		context.registerService(HeatingCommand.class.getName(), new HeatingCommand(), dict);
+		
+		ControllerStateManagement.registerControllerCommand(heatingModule);
 	}
 
 	@Override
 	public void stop(BundleContext arg0) throws Exception {
-//		ControllerStateManagement.registerControllerDimensionCommand(heatingModule);
+		ControllerStateManagement.registerControllerCommand(heatingModule);
 	}
 	
 	
