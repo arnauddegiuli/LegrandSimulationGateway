@@ -18,7 +18,10 @@
 			<!-- Now, select which projects to include in this module-set. -->
 			<includes>
 				<include>com.domosnap.simulationServer:server</include>
-				<include>com.domosnap.simulationServer:light</include>
+				<include>com.domosnap.simulationServer.controllermodules:light</include>
+				<include>com.domosnap.simulationServer.controllermodules:automation</include>
+				<include>com.domosnap.simulationServer.controllermodules:gateway</include>
+				<include>com.domosnap.simulationServer.controllermodules:heating</include>
 			</includes>
 			<binaries>
 				<outputDirectory>bundle</outputDirectory>

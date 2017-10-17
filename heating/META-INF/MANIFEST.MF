@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: DomoSnapSimulationServerGatewayModule
+Bundle-Name: DomoSnapSimulationServerHeatingModule
 Bundle-SymbolicName: com.domosnap.simulationServer.controllermodule.heating
 Bundle-Version: 0.1
 Bundle-Activator: com.domosnap.simulationServer.controllermodules.heating.HeatingModuleActivator
@@ -15,4 +15,4 @@ Import-Package: com.domosnap.engine,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.domosnap.simulationServer.controllermodules.heating
-Require-Bundle: com.domosnap.engine, com.domosnap.simulationServer
+Require-Bundle: com.domosnap.engine
