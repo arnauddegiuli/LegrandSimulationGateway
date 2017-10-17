@@ -31,6 +31,7 @@ import java.net.Socket;
 import java.util.List;
 
 import com.domosnap.engine.Log;
+import com.domosnap.engine.Log.Session;
 import com.domosnap.engine.connector.impl.openwebnet.conversion.core.OpenWebNetCommand;
 import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.ParseException;
 
@@ -38,7 +39,7 @@ public class CommandSession {
 	private Socket client; // liaison avec client
 	private BufferedReader depuisClient; // réception de requête
 	private PrintWriter versClient; // envoi des réponses
-	private Log log = new Log();
+	private Log log = new Log(CommandSession.class.getSimpleName());
 
 	public CommandSession(Socket client, BufferedReader depuisClient, PrintWriter versClient) {
 		this.client = client;
@@ -49,7 +50,7 @@ public class CommandSession {
 	private void write(String msg) {
 		versClient.print(msg);
 		versClient.flush();
-		log.fine(this.getClass().getSimpleName(), "Send to COMMAND client: " + msg);
+		log.fine(Session.Server, "Send to COMMAND client: " + msg);
 	}
 
 	private String read(){
@@ -65,7 +66,7 @@ public class CommandSession {
 				if(client != null && !client.isInputShutdown()) {
 					ci = depuisClient.read();
 					if (ci == -1) {
-						log.finest(this.getClass().getSimpleName(), "End of read from command client socket.");
+						log.finest(Session.Server, "End of read from command client socket.");
 						client = null;
 						break;
 					} else { 
@@ -85,14 +86,14 @@ public class CommandSession {
 				}
 			} while(true); 
 		} catch(IOException e) {
-			log.severe(this.getClass().getSimpleName(), "Socket not available");
+			log.severe(Session.Server, "Socket not available");
 		}
 
 		if (exit == true){
 			responseString = new String(respond,0,indice+1);
 		}
 
-		log.fine(this.getClass().getSimpleName(), "Read from COMMAND client: " + responseString);
+		log.fine(Session.Server, "Read from COMMAND client: " + responseString);
 
 		return responseString;
 	}
@@ -117,7 +118,7 @@ public class CommandSession {
 						}
 					}	
 				} catch (ParseException e) {
-					log.finest(this.getClass().getSimpleName(), "Error during parsing command [" + lue + "]: command is not supported or wrong...");
+					log.finest(Session.Server, "Error during parsing command [" + lue + "]: command is not supported or wrong...");
 					e.printStackTrace();
 				}
 				
@@ -128,12 +129,12 @@ public class CommandSession {
 
 	public void stop() {
 		try {
-			log.fine(this.getClass().getSimpleName(), "End Command Session.");
+			log.fine(Session.Server, "End Command Session.");
 			if (client != null) {
 				client.close();
 			}
 		} catch (IOException e) {
-			log.severe(this.getClass().getSimpleName(), "Exception à la fermeture d'une connexion : "
+			log.severe(Session.Server, "Exception à la fermeture d'une connexion : "
 					+ e.getMessage());
 		}
 	}

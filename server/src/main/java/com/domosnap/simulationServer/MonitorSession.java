@@ -28,11 +28,12 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import com.domosnap.engine.Log;
+import com.domosnap.engine.Log.Session;
 
 public class MonitorSession {
 	private Socket client; // liaison avec client
 	private PrintWriter versClient; // envoi des réponses
-	private Log log = new Log();
+	private Log log = new Log(MonitorSession.class.getSimpleName());
 	
 	public MonitorSession(Socket client, PrintWriter versClient) {
 		this.client = client;
@@ -42,10 +43,10 @@ public class MonitorSession {
 	private void write(String msg) throws IOException {
 		versClient.print(msg);
 		if (versClient.checkError()) {
-			log.severe(this.getClass().getSimpleName(), "ERROR WHEN MONITOR SERVER WRITE: " + msg);
+			log.severe(Session.Server, "ERROR WHEN MONITOR SERVER WRITE: " + msg);
 			throw new IOException();
 		} else {
-			log.fine(this.getClass().getSimpleName(), "Send to MONITOR client: " + msg);
+			log.fine(Session.Server, "Send to MONITOR client: " + msg);
 		}
 	}
 
@@ -53,17 +54,17 @@ public class MonitorSession {
 		try {
 			write(command);
 		} catch (IOException e) {
-			log.severe(this.getClass().getSimpleName(), "Error with IO : " + e.getMessage());
+			log.severe(Session.Server, "Error with IO : " + e.getMessage());
 			stop();
 		}
 	}
 	
 	public void stop() {
 		try {
-			log.fine(this.getClass().getSimpleName(), "End Monitor Session.");
+			log.fine(Session.Server, "End Monitor Session.");
 			client.close();
 		} catch (IOException e) {
-			log.severe(this.getClass().getSimpleName(), "Error when closing connection : "
+			log.severe(Session.Server, "Error when closing connection : "
 					+ e.getMessage());
 		} finally {
 			ControllerStateManagement.unRegisterMonitorSession(this);

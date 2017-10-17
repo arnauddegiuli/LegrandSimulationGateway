@@ -39,7 +39,7 @@ import com.domosnap.engine.connector.impl.openwebnet.connector.OpenWebNetConstan
 
 public class Server {
 
-	Log log = new Log();
+	Log log = new Log(Server.class.getSimpleName());
 	private int port = 1234;
 	private Integer password = 12345;
 	private static final int nonce = 603356072;
@@ -98,7 +98,6 @@ public class Server {
 
 	class Handler implements Runnable {
     	private final Socket socket;
-    	Log log = new Log();
     	
     	public Handler(Socket socket) {
 			this.socket = socket;
@@ -125,13 +124,13 @@ public class Server {
 						write(Session.Monitor, "*#" + nonce + "##", versClient);
 						String result = read(socket, depuisClient);
 						if (!"*#25280520##".equals(result)) {
-							log.fine(this.getClass().getSimpleName(), "Password error..."); 
+							log.fine(Session.Server, "Password error..."); 
 							write(Session.Monitor, OpenWebNetConstant.NACK, versClient);
 							return;
 						}
 					}
 					
-					log.fine(this.getClass().getSimpleName(), "Start Monitor Session..."); 
+					log.fine(Session.Server, "Start Monitor Session..."); 
 					write(Session.Monitor, OpenWebNetConstant.ACK, versClient);
 					ControllerStateManagement.registerMonitorSession(
 							new MonitorSession(socket, versClient)
@@ -143,12 +142,12 @@ public class Server {
 						write(Session.Command, "*#" + nonce + "##", versClient);
 						String result = read(socket, depuisClient);
 						if (!"*#25280520##".equals(result)) {
-							log.fine(this.getClass().getSimpleName(), "Password error..."); 
+							log.fine(Session.Server, "Password error..."); 
 							write(Session.Command, OpenWebNetConstant.NACK, versClient);
 							return;
 						}
 					}
-					log.fine(this.getClass().getSimpleName(), "Start Command Session...");
+					log.fine(Session.Server, "Start Command Session...");
 					write(Session.Command, OpenWebNetConstant.ACK, versClient);
 					new CommandSession(socket, depuisClient,
 							versClient).run();
@@ -167,7 +166,7 @@ public class Server {
     	private void write(Session session, String msg, PrintWriter versClient) {
     		versClient.print(msg);
     		versClient.flush();
-    		log.fine(this.getClass().getSimpleName(), "Send to " + session.name().toUpperCase() + " client: " + msg);
+    		log.fine(Session.Server, "Send to " + session.name().toUpperCase() + " client: " + msg);
     	}
 
     	private String read(Socket client, BufferedReader depuisClient) {
@@ -208,7 +207,7 @@ public class Server {
     			responseString = new String(respond, 0, indice + 1);
     		}
 
-    		log.fine(this.getClass().getSimpleName(), "FROM SERVER CLIENT: " + responseString);
+    		log.fine(Session.Server, "FROM SERVER CLIENT: " + responseString);
 
     		return responseString;
     	}

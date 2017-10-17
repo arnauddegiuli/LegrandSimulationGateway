@@ -28,6 +28,7 @@ import java.util.Hashtable;
 import java.util.List;
 
 import com.domosnap.engine.Log;
+import com.domosnap.engine.Log.Session;
 import com.domosnap.engine.connector.impl.openwebnet.connector.OpenWebNetConstant;
 import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.CommandParser;
 import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.ParseException;
@@ -36,7 +37,7 @@ import com.domosnap.simulationServer.controllermodules.ControllerSimulator;
 public class ControllerStateManagement {
 	
 	private static Hashtable<String, ControllerSimulator> controllerCommandList = new Hashtable<String, ControllerSimulator>();
-	private static Log log = new Log();
+	private static Log log = new Log(ControllerStateManagement.class.getSimpleName());
 	
 	private static List<MonitorSession> monitorList = new ArrayList<MonitorSession>();
 	
@@ -110,7 +111,7 @@ public class ControllerStateManagement {
 			}
 			return result;
 		} catch (ParseException e) {
-			log.finest(ControllerStateManagement.class.getName(), "Error during parsing command [" + command + "]");
+			log.finest(Session.Server, "Error during parsing command [" + command + "]");
 			e.printStackTrace();
 			return null;
 		}
@@ -150,13 +151,13 @@ public class ControllerStateManagement {
 					}
 					return result;
 				} else {
-					log.info(ControllerStateManagement.class.getName(), "Error during parsing command [" + command + "]");
+					log.info(Session.Server, "Error during parsing command [" + command + "]");
 					return new ArrayList<String>();
 				}
 				
 			}
 		} catch (ParseException e) {
-			log.finest(ControllerStateManagement.class.getName(), "Error during parsing command [" + command + "]");
+			log.finest(Session.Server, "Error during parsing command [" + command + "]");
 			e.printStackTrace();
 			List<String> result = new ArrayList<String>();
 			result.add(OpenWebNetConstant.NACK);
