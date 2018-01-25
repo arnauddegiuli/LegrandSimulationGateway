@@ -8,9 +8,9 @@
                     <snapshots>
                         <enabled>false</enabled>
                     </snapshots>
-                    <id>bintray-arnauddegiuli-homesnap</id>
+                    <id>bintray-arnauddegiuli-domosnap</id>
                     <name>bintray</name>
-                    <url>http://dl.bintray.com/arnauddegiuli/homesnap</url>
+                    <url>http://dl.bintray.com/arnauddegiuli/domosnap</url>
                 </repository>
             </repositories>
             <pluginRepositories>
@@ -18,9 +18,9 @@
                     <snapshots>
                         <enabled>false</enabled>
                     </snapshots>
-                    <id>bintray-arnauddegiuli-homesnap</id>
+                    <id>bintray-arnauddegiuli-domosnap</id>
                     <name>bintray-plugins</name>
-                    <url>http://dl.bintray.com/arnauddegiuli/homesnap</url>
+                    <url>http://dl.bintray.com/arnauddegiuli/domosnap</url>
                 </pluginRepository>
             </pluginRepositories>
             <id>bintray</id>
