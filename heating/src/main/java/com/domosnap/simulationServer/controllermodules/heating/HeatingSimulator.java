@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.MissingResourceException;
 
 import com.domosnap.engine.connector.impl.openwebnet.connector.OpenWebNetConstant;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.core.WhereType;
 import com.domosnap.engine.connector.impl.openwebnet.conversion.core.dimension.DimensionValue;
 import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.CommandParser;
 import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.ParseException;

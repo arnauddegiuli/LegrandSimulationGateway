@@ -35,7 +35,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import com.domosnap.engine.connector.impl.openwebnet.conversion.core.dimension.DimensionValue;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.core.dimension.DimensionValueImpl;
 
 public class DimensionManager implements Map<String,List<DimensionValue>> {
 
