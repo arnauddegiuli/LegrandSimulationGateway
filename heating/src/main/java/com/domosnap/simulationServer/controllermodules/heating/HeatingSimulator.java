@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.MissingResourceException;
 
 import com.domosnap.engine.connector.impl.openwebnet.connector.OpenWebNetConstant;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.core.WhereType;
 import com.domosnap.engine.connector.impl.openwebnet.conversion.core.dimension.DimensionValue;
 import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.CommandParser;
 import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.ParseException;
@@ -61,34 +62,34 @@ public class HeatingSimulator implements ControllerSimulator {
 		try {
 			CommandParser parser = CommandParser.parse(command);
 
-//			if (WhereType.GENERAL == parser.getWhereType()) {
-//				// We send command to all correct address
-//				for (int i = 11; i < 99; i++) {
-//					try {
-//						if (i % 10 != 0) { // group address (20, 30, ..) are not correct
-//							updateController(""+i, parser);
-//						}
-//					} catch (UnknownDeviceException e) {
-//						System.out.println(e.getMessage());
-//					}
-//				}
-//			} else if (WhereType.GROUP == parser.getWhereType()) {
-//				// We send command to group address
-//				// TODO Not supported actually...
-//			} else if (WhereType.ENVIRONMENT == parser.getWhereType()) {
-//				String environment = parser.getEnvironment();
-//				// We send ambiance command to address
-//				for (int i = 1; i < 9; i++) {
-//					try {
-//						updateController(environment + i, parser);
-//					} catch (UnknownDeviceException e) {
-//						System.out.println(e.getMessage());
-//					}
-//				}
-//			} else {
+			if (WhereType.GENERAL == parser.getWhereType()) {
+				// We send command to all correct address
+				for (int i = 1; i < 99; i++) {
+					try {
+						if (i % 10 != 0) { // group address (20, 30, ..) are not correct
+							updateController(""+i, parser);
+						}
+					} catch (UnknownDeviceException e) {
+						System.out.println(e.getMessage());
+					}
+				}
+			} else if (WhereType.GROUP == parser.getWhereType()) {
+				// We send command to group address
+				// TODO Not supported actually...
+			} else /*if (WhereType.ENVIRONMENT == parser.getWhereType()) {// TODO actually heating adress 2 is a true adress and no an environnement adress... should be fix in parser... 
+				String environment = parser.getEnvironment();
+				// We send ambiance command to address
+				for (int i = 1; i < 9; i++) {
+					try {
+						updateController(environment + i, parser);
+					} catch (UnknownDeviceException e) {
+						System.out.println(e.getMessage());
+					}
+				}
+			} else */{
 				// Command direct on a controller
 				updateController(parser.getWhere(), parser);
-//			}
+			}
 			
 			return OpenWebNetConstant.ACK;
 
@@ -151,37 +152,37 @@ public class HeatingSimulator implements ControllerSimulator {
 		try {
 			CommandParser parser = CommandParser.parse(command);
 			
-//			if (WhereType.GENERAL == parser.getWhereType()) {
-//				// We send command to all correct address
-//				for (int i = 11; i < 100; i++) {
-//					if (i % 10 != 0) { // group address (20, 30, ..) are not correct
-//						try {
-//							String status = updateStatus(""+i, parser);
-//							if (status != null) {
-//								result.add(status);
-//							}
-//						} catch (UnknownDeviceException e) {
-//							System.out.println(e.getMessage());
-//						}
-//					}
-//				}
-//			} else if (WhereType.GROUP == parser.getWhereType()) {
-//				// We send command to group address
-//				// TODO Not supported actually...
-//			} else if (WhereType.ENVIRONMENT == parser.getWhereType()) {
-//				String environment = parser.getEnvironment();
-//				// We send ambiance command to address
-//				for (int i = 1; i < 10; i++) {
-//					try {
-//						String status = updateStatus(environment+i, parser);
-//						if (status != null) {
-//							result.add(status);
-//						}
-//					} catch (UnknownDeviceException e) {
-//						System.out.println(e.getMessage());
-//					}
-//				}
-//			} else {
+			if (WhereType.GENERAL == parser.getWhereType()) {
+				// We send command to all correct address
+				for (int i = 1; i < 100; i++) {
+					if (i % 10 != 0) { // group address (20, 30, ..) are not correct
+						try {
+							String status = updateStatus(""+i, parser);
+							if (status != null) {
+								result.add(status);
+							}
+						} catch (UnknownDeviceException e) {
+							System.out.println(e.getMessage());
+						}
+					}
+				}
+			} else if (WhereType.GROUP == parser.getWhereType()) {
+				// We send command to group address
+				// TODO Not supported actually...
+			} else /* if (WhereType.ENVIRONMENT == parser.getWhereType()) { // TODO actually heating adress 2 is a true adress and no an environnement adress... should be fix in parser...
+				String environment = parser.getEnvironment();
+				// We send ambiance command to address
+				for (int i = 1; i < 10; i++) {
+					try {
+						String status = updateStatus(environment+i, parser);
+						if (status != null) {
+							result.add(status);
+						}
+					} catch (UnknownDeviceException e) {
+						System.out.println(e.getMessage());
+					}
+				}
+			} else */ {
 				// Command direct on a controller
 				String status;
 				try {
@@ -195,7 +196,7 @@ public class HeatingSimulator implements ControllerSimulator {
 					return result;
 				}
 
-//			}
+			}
 
 			result.add(OpenWebNetConstant.ACK);
 		} catch (ParseException e) {

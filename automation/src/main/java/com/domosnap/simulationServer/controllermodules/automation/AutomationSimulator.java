@@ -29,10 +29,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.domosnap.engine.connector.impl.openwebnet.connector.OpenWebNetConstant;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.automation.AutomationStatusConverter;
 import com.domosnap.engine.connector.impl.openwebnet.conversion.core.WhereType;
 import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.CommandParser;
 import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.ParseException;
+import com.domosnap.engine.connector.impl.openwebnet.conversion.shutter.ShutterStatusConverter;
 import com.domosnap.engine.controller.who.Who;
 import com.domosnap.simulationServer.controllermodules.ControllerSimulator;
 import com.domosnap.simulationServer.controllermodules.StatusManager;
@@ -91,12 +91,12 @@ public class AutomationSimulator implements ControllerSimulator {
 	
 	private void updateController(String where, String what) throws UnknownDeviceException {
 		if (!statusList.containsKey(where)) {
-			throw new UnknownDeviceException(Who.AUTOMATION, where, what);
+			throw new UnknownDeviceException(Who.SHUTTER, where, what);
 		}
 		
-		if (AutomationStatusConverter.AutomationStatus.AUTOMATION_DOWN.getCode().equals(what)
-				|| AutomationStatusConverter.AutomationStatus.AUTOMATION_STOP.getCode().equals(what)
-				|| AutomationStatusConverter.AutomationStatus.AUTOMATION_UP.getCode().equals(what)) {
+		if (ShutterStatusConverter.AutomationStatus.AUTOMATION_DOWN.getCode().equals(what)
+				|| ShutterStatusConverter.AutomationStatus.AUTOMATION_STOP.getCode().equals(what)
+				|| ShutterStatusConverter.AutomationStatus.AUTOMATION_UP.getCode().equals(what)) {
 			statusList.put(where, what);
 			
 		} else {
@@ -168,7 +168,7 @@ public class AutomationSimulator implements ControllerSimulator {
 	
 	private String updateStatus(String where) throws UnknownDeviceException {
 		if (!statusList.containsKey(where)) {
-			throw new UnknownDeviceException(Who.AUTOMATION, where, null);
+			throw new UnknownDeviceException(Who.SHUTTER, where, null);
 		}
 		String what = statusList.get(where);
 		return what == null ? null : MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {getWho(), what, where} );
@@ -177,6 +177,6 @@ public class AutomationSimulator implements ControllerSimulator {
 	
 	@Override
 	public String getWho() {
-		return new AutomationStatusConverter().getOpenWebWho();
+		return new ShutterStatusConverter().getOpenWebWho();
 	}
 }

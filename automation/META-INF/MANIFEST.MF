@@ -7,7 +7,7 @@ Bundle-Activator: com.domosnap.simulationServer.controllermodules.automation.Aut
 Import-Package: com.domosnap.engine,
  com.domosnap.engine.connector.impl.openwebnet,
  com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser,
- com.domosnap.engine.controller.automation,
+ com.domosnap.engine.controller.shutter,
  com.domosnap.simulationServer,
  com.domosnap.simulationServer.controllermodules,
  org.osgi.framework
