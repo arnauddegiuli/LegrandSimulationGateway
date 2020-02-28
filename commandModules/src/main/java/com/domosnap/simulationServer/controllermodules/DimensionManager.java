@@ -4,7 +4,7 @@ package com.domosnap.simulationServer.controllermodules;
  * #%L
  * DomoSnap Legrand Simulation Gateway Interfaces
  * %%
- * Copyright (C) 2011 - 2018 A. de Giuli
+ * Copyright (C) 2011 - 2020 A. de Giuli
  * %%
  * This file is part of MyDomo done by A. de Giuli (arnaud.degiuli(at)free.fr).
  * 
@@ -34,11 +34,15 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import com.domosnap.engine.Log;
+import com.domosnap.engine.Log.Session;
 import com.domosnap.engine.connector.impl.openwebnet.conversion.core.dimension.DimensionValue;
 
 public class DimensionManager implements Map<String,List<DimensionValue>> {
 
 	private Hashtable<String, List<DimensionValue>> statusList = new Hashtable<String, List<DimensionValue>>(); // where-dimension, what
+	private Log log = new Log(DimensionManager.class.getName());
+	
 	
 	public DimensionManager(InputStream is) {
 		read(is);
@@ -67,11 +71,9 @@ public class DimensionManager implements Map<String,List<DimensionValue>> {
 				statusList.put(key, list);
 			} 			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.severe(Session.Server, e.getMessage());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.severe(Session.Server, e.getMessage());
 		}
 	}
 

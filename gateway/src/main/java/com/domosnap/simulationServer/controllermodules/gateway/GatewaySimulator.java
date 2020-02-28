@@ -4,7 +4,7 @@ package com.domosnap.simulationServer.controllermodules.gateway;
  * #%L
  * DomoSnap Legrand Simulation Gateway GatewayModule
  * %%
- * Copyright (C) 2011 - 2018 A. de Giuli
+ * Copyright (C) 2011 - 2020 A. de Giuli
  * %%
  * This file is part of MyDomo done by A. de Giuli (arnaud.degiuli(at)free.fr).
  * 
@@ -85,9 +85,8 @@ public class GatewaySimulator implements ControllerSimulator {
 				return OpenWebNetConstant.NACK;
 			}
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-						e.printStackTrace();
-						return null;
+			e.printStackTrace();
+			return null;
 		}
 	}
 
@@ -291,7 +290,6 @@ public class GatewaySimulator implements ControllerSimulator {
 					getWho(), where, dimensionStr, sb.toString() })
 					+ OpenWebNetConstant.ACK;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
