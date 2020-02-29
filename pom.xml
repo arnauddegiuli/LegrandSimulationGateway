@@ -7,7 +7,7 @@
 	<groupId>com.domosnap.simulationServer</groupId>
 	<artifactId>LegrandSimulationGatewayProject</artifactId>
 	<name>DomoSnap Legrand Simulation Gateway</name>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -23,7 +23,7 @@
 	<properties>
 		<licence.plugin.version>1.7</licence.plugin.version>
 		<file.encoding>UTF-8</file.encoding>
-		<engine.version>0.1.15-SNAPSHOT</engine.version>
+		<engine.version>0.1.15</engine.version>
 	</properties>
 
 	<dependencyManagement>
