@@ -5,8 +5,8 @@ Bundle-SymbolicName: com.domosnap.simulationServer.controllermodule.gateway
 Bundle-Version: 0.1
 Bundle-Activator: com.domosnap.simulationServer.controllermodules.gateway.GatewayModuleActivator
 Import-Package: com.domosnap.engine,
- com.domosnap.engine.connector.impl.openwebnet,
- com.domosnap.engine.connector.impl.openwebnet.conversion.gateway,
+ com.domosnap.engine.adapter.impl.openwebnet,
+ com.domosnap.engine.adapter.impl.openwebnet.conversion.gateway,
  com.domosnap.simulationServer,
  com.domosnap.simulationServer.controllermodules,
  org.osgi.framework

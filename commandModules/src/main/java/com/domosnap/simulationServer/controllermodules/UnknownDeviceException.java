@@ -23,16 +23,16 @@ package com.domosnap.simulationServer.controllermodules;
  * #L%
  */
 
-import com.domosnap.engine.controller.who.Who;
+import com.domosnap.engine.controller.Controller;
 
 public class UnknownDeviceException extends Exception {
 
 	private static final long serialVersionUID = 1L;
-	private Who who;
+	private Class<? extends Controller> who;
 	private String where;
 	private String what;
 	
-	public UnknownDeviceException(Who who, String where, String what) {
+	public UnknownDeviceException(Class<? extends Controller> who, String where, String what) {
 		this.where = where;
 		this.what = what;
 		this.who = who;

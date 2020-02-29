@@ -30,9 +30,9 @@
 						<Bundle-Version>${project.version}</Bundle-Version>
 						<Bundle-Activator>com.domosnap.simulationServer.controllermodules.light.LightModuleActivator</Bundle-Activator>
 						<Import-Package>com.domosnap.engine,
-							 com.domosnap.engine.connector.impl.openwebnet,
-							 com.domosnap.engine.connector.impl.openwebnet.conversion.light,
-							 com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser,
+							 com.domosnap.engine.adapter.impl.openwebnet,
+							 com.domosnap.engine.adapter.impl.openwebnet.conversion.light,
+							 com.domosnap.engine.adapter.impl.openwebnet.conversion.core.parser,
 							 com.domosnap.simulationServer,
 							 com.domosnap.simulationServer.controllermodules,
 							 org.osgi.framework
@@ -98,7 +98,7 @@
 	<!-- Dependecies Management -->
 	<dependencies>
 		<dependency>
-			<groupId>com.domosnap</groupId>
+			<groupId>com.domosnap.core</groupId>
 			<artifactId>engine</artifactId>
 			<version>${engine.version}</version>
 		</dependency>

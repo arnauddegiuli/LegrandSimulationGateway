@@ -29,8 +29,8 @@ import java.io.FileNotFoundException;
 
 import java.text.MessageFormat;
 
-import com.domosnap.engine.connector.impl.openwebnet.connector.OpenWebNetConstant;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.light.LightStatusConverter;
+import com.domosnap.engine.adapter.impl.openwebnet.connector.OpenWebNetConstant;
+import com.domosnap.engine.adapter.impl.openwebnet.conversion.light.LightStatusConverter;
 import com.domosnap.simulationServer.ControllerStateManagement;
 import com.domosnap.simulationServer.controllermodules.StatusManager;
 

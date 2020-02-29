@@ -22,6 +22,7 @@
 				<include>com.domosnap.simulationServer.controllermodules:automation</include>
 				<include>com.domosnap.simulationServer.controllermodules:gateway</include>
 				<include>com.domosnap.simulationServer.controllermodules:heating</include>
+                                <include>com.domosnap.simulationServer:controllermodules</include>
 			</includes>
 			<binaries>
 				<outputDirectory>bundle</outputDirectory>
@@ -37,7 +38,7 @@
 			<outputDirectory>/lib</outputDirectory> <includes> <include>jdbc-perf-logger-agent-*.jar</include> 
 			</includes> </fileSet> -->
 		<fileSet>
-			<directory>felix-framework-5.6.1</directory>
+			<directory>felix-framework-6.0.3</directory>
 			<outputDirectory>/</outputDirectory>
 			<includes>
 				<include>**/*</include>

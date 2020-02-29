@@ -27,12 +27,12 @@ package com.domosnap.simulationServer.controllermodules.heating;
 import java.text.MessageFormat;
 import java.util.List;
 
-import com.domosnap.engine.connector.impl.openwebnet.connector.OpenWebNetConstant;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.core.dimension.DimensionValue;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.heating.HeatingZoneConverter;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.heating.HeatingZoneConverter.HeatingZoneDimension;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.heating.dimension.DesiredTemperature;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.heating.dimension.MeasureTemperature;
+import com.domosnap.engine.adapter.impl.openwebnet.connector.OpenWebNetConstant;
+import com.domosnap.engine.adapter.impl.openwebnet.conversion.core.dimension.DimensionValue;
+import com.domosnap.engine.adapter.impl.openwebnet.conversion.heating.HeatingZoneConverter;
+import com.domosnap.engine.adapter.impl.openwebnet.conversion.heating.HeatingZoneConverter.HeatingZoneDimension;
+import com.domosnap.engine.adapter.impl.openwebnet.conversion.heating.dimension.DesiredTemperature;
+import com.domosnap.engine.adapter.impl.openwebnet.conversion.heating.dimension.MeasureTemperature;
 import com.domosnap.simulationServer.ControllerStateManagement;
 
 public class HeatingCommand {

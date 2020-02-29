@@ -6,6 +6,6 @@ Bundle-Version: 0.1
 Export-Package: com.domosnap.simulationServer.controllermodules
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: com.domosnap.engine.controller,
- com.domosnap.engine.connector.impl.openwebnet.conversion.core.dimension,
+Import-Package: com.domosnap.engine,com.domosnap.engine.controller,
+ com.domosnap.engine.adapter.impl.openwebnet.conversion.core.dimension,
  org.osgi.framework

@@ -29,12 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
 
-import com.domosnap.engine.connector.impl.openwebnet.connector.OpenWebNetConstant;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.core.WhereType;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.CommandParser;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.ParseException;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.light.LightStatusConverter;
-import com.domosnap.engine.controller.who.Who;
+import com.domosnap.engine.adapter.impl.openwebnet.connector.OpenWebNetConstant;
+import com.domosnap.engine.adapter.impl.openwebnet.conversion.core.WhereType;
+import com.domosnap.engine.adapter.impl.openwebnet.conversion.core.parser.CommandParser;
+import com.domosnap.engine.adapter.impl.openwebnet.conversion.core.parser.ParseException;
+import com.domosnap.engine.adapter.impl.openwebnet.conversion.light.LightStatusConverter;
+import com.domosnap.engine.controller.light.Light;
 import com.domosnap.simulationServer.controllermodules.ControllerSimulator;
 import com.domosnap.simulationServer.controllermodules.StatusManager;
 import com.domosnap.simulationServer.controllermodules.UnknownDeviceException;
@@ -106,7 +106,7 @@ public class LightSimulator implements ControllerSimulator {
 	
 	private void updateController(String where, String what) throws UnknownDeviceException {
 		if (!statusList.containsKey(where)) {
-			throw new UnknownDeviceException(Who.LIGHT, where, null);
+			throw new UnknownDeviceException(Light.class, where, null);
 		}
 		
 		if (LightStatusConverter.LightStatus.LIGHT_OFF.getCode().equals(what)
@@ -184,7 +184,7 @@ public class LightSimulator implements ControllerSimulator {
 	
 	private String updateStatus(String where) throws UnknownDeviceException {
 		if (!statusList.containsKey(where)) {
-			throw new UnknownDeviceException(Who.LIGHT, where, null);
+			throw new UnknownDeviceException(Light.class, where, null);
 		}
 		String what = statusList.get(where);
 		return what == null ? null : MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {getWho(), what, where} );

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -22,7 +23,7 @@
 	<properties>
 		<licence.plugin.version>1.7</licence.plugin.version>
 		<file.encoding>UTF-8</file.encoding>
-		<engine.version>0.1.12</engine.version>
+		<engine.version>0.1.15-SNAPSHOT</engine.version>
 	</properties>
 
 	<dependencyManagement>
@@ -64,6 +65,15 @@
 			</plugin>
 		</plugins>
 	</build>
+
+
+	<repositories>
+		<repository>
+			<id>domosnap-core</id>
+			<name>domosnap-core</name>
+			<url>https://bintray.com/domosnap/domosnap-core</url>
+		</repository>
+	</repositories>
 
 	<inceptionYear>2011</inceptionYear>
 

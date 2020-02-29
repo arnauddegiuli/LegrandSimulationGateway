@@ -28,12 +28,12 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.domosnap.engine.connector.impl.openwebnet.connector.OpenWebNetConstant;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.core.WhereType;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.CommandParser;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.ParseException;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.shutter.ShutterStatusConverter;
-import com.domosnap.engine.controller.who.Who;
+import com.domosnap.engine.adapter.impl.openwebnet.connector.OpenWebNetConstant;
+import com.domosnap.engine.adapter.impl.openwebnet.conversion.core.WhereType;
+import com.domosnap.engine.adapter.impl.openwebnet.conversion.core.parser.CommandParser;
+import com.domosnap.engine.adapter.impl.openwebnet.conversion.core.parser.ParseException;
+import com.domosnap.engine.adapter.impl.openwebnet.conversion.shutter.ShutterStatusConverter;
+import com.domosnap.engine.controller.shutter.Shutter;
 import com.domosnap.simulationServer.controllermodules.ControllerSimulator;
 import com.domosnap.simulationServer.controllermodules.StatusManager;
 import com.domosnap.simulationServer.controllermodules.UnknownDeviceException;
@@ -91,7 +91,7 @@ public class AutomationSimulator implements ControllerSimulator {
 	
 	private void updateController(String where, String what) throws UnknownDeviceException {
 		if (!statusList.containsKey(where)) {
-			throw new UnknownDeviceException(Who.SHUTTER, where, what);
+			throw new UnknownDeviceException(Shutter.class, where, what);
 		}
 		
 		if (ShutterStatusConverter.AutomationStatus.AUTOMATION_DOWN.getCode().equals(what)
@@ -168,7 +168,7 @@ public class AutomationSimulator implements ControllerSimulator {
 	
 	private String updateStatus(String where) throws UnknownDeviceException {
 		if (!statusList.containsKey(where)) {
-			throw new UnknownDeviceException(Who.SHUTTER, where, null);
+			throw new UnknownDeviceException(Shutter.class, where, null);
 		}
 		String what = statusList.get(where);
 		return what == null ? null : MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {getWho(), what, where} );

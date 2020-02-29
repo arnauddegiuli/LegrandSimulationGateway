@@ -28,8 +28,9 @@
 						<Bundle-Description>${project.description}</Bundle-Description>
 						<Bundle-Vendor>ADG Software</Bundle-Vendor>
 						<Bundle-Version>${project.version}</Bundle-Version>
-						<Import-Package>com.domosnap.engine.controller,
-							com.domosnap.engine.connector.impl.openwebnet.conversion.core.dimension,
+						<Import-Package>com.domosnap.engine,
+							com.domosnap.engine.controller,
+							com.domosnap.engine.adapter.impl.openwebnet.conversion.core.dimension,
 							org.osgi.framework</Import-Package>
 						<Export-Package>com.domosnap.simulationServer.controllermodules</Export-Package>
 					</instructions>
@@ -93,7 +94,7 @@
 	<!-- Dependecies Management -->
 	<dependencies>
 		<dependency>
-			<groupId>com.domosnap</groupId>
+			<groupId>com.domosnap.core</groupId>
 			<artifactId>engine</artifactId>
 			<version>${engine.version}</version>
 		</dependency>

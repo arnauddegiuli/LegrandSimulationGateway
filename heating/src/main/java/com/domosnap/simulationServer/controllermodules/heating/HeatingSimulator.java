@@ -28,13 +28,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
 
-import com.domosnap.engine.connector.impl.openwebnet.connector.OpenWebNetConstant;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.core.WhereType;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.core.dimension.DimensionValue;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.CommandParser;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.core.parser.ParseException;
-import com.domosnap.engine.connector.impl.openwebnet.conversion.heating.HeatingZoneConverter;
-import com.domosnap.engine.controller.who.Who;
+import com.domosnap.engine.adapter.impl.openwebnet.connector.OpenWebNetConstant;
+import com.domosnap.engine.adapter.impl.openwebnet.conversion.core.WhereType;
+import com.domosnap.engine.adapter.impl.openwebnet.conversion.core.dimension.DimensionValue;
+import com.domosnap.engine.adapter.impl.openwebnet.conversion.core.parser.CommandParser;
+import com.domosnap.engine.adapter.impl.openwebnet.conversion.core.parser.ParseException;
+import com.domosnap.engine.adapter.impl.openwebnet.conversion.heating.HeatingZoneConverter;
+import com.domosnap.engine.controller.heating.HeatingZone;
 import com.domosnap.simulationServer.controllermodules.ControllerSimulator;
 import com.domosnap.simulationServer.controllermodules.DimensionManager;
 import com.domosnap.simulationServer.controllermodules.StatusManager;
@@ -113,7 +113,7 @@ public class HeatingSimulator implements ControllerSimulator {
 		String what = parser.getWhat();
 		if (what != null) { // status
 			if (!statusList.containsKey(where)) {
-				throw new UnknownDeviceException(Who.HEATING_ADJUSTMENT, where, null);
+				throw new UnknownDeviceException(HeatingZone.class, where, null);
 			}
 			
 			if (HeatingZoneConverter.HeatingZoneStatus.HEATING_MODE.getCode().equals(what)
@@ -131,7 +131,7 @@ public class HeatingSimulator implements ControllerSimulator {
 
 			String id = where + "-" + dimension;
 			if (!dimensionListManager.containsKey(id)) {
-				throw new UnknownDeviceException(Who.HEATING_ADJUSTMENT, where, null);
+				throw new UnknownDeviceException(HeatingZone.class, where, null);
 			}
 			
 			if (HeatingZoneConverter.HeatingZoneDimension.MEASURE_TEMPERATURE.getCode().equals(dimension)
@@ -211,7 +211,7 @@ public class HeatingSimulator implements ControllerSimulator {
 		String dimension = parser.getDimension();
 		if (dimension == null) { // status
 			if (!statusList.containsKey(where)) {
-				throw new UnknownDeviceException(Who.HEATING_ADJUSTMENT, where, null);
+				throw new UnknownDeviceException(HeatingZone.class, where, null);
 			}
 			String what = statusList.get(where);
 			return what == null ? null : MessageFormat.format(OpenWebNetConstant.COMMAND, new Object[] {getWho(), what, where} );
@@ -219,7 +219,7 @@ public class HeatingSimulator implements ControllerSimulator {
 
 			String id = where + "-" + dimension;
 			if (!dimensionListManager.containsKey(id)) {
-				throw new UnknownDeviceException(Who.HEATING_ADJUSTMENT, where, null);
+				throw new UnknownDeviceException(HeatingZone.class, where, null);
 			}
 			
 			if (HeatingZoneConverter.HeatingZoneDimension.MEASURE_TEMPERATURE.getCode().equals(dimension)
