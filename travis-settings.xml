@@ -2,15 +2,15 @@
 <settings xsi:schemaLocation='http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd'
           xmlns='http://maven.apache.org/SETTINGS/1.0.0' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
     <profiles>
-        <profile>
+<profile>
             <repositories>
                 <repository>
                     <snapshots>
                         <enabled>false</enabled>
                     </snapshots>
-                    <id>bintray-arnauddegiuli-domosnap</id>
-                    <name>bintray</name>
-                    <url>http://dl.bintray.com/arnauddegiuli/domosnap</url>
+                    <id>bintray-domosnap-domosnap-core</id>
+                    <name>domosnap-core</name>
+                    <url>https://dl.bintray.com/domosnap/domosnap-core</url>
                 </repository>
             </repositories>
             <pluginRepositories>
@@ -18,15 +18,15 @@
                     <snapshots>
                         <enabled>false</enabled>
                     </snapshots>
-                    <id>bintray-arnauddegiuli-domosnap</id>
-                    <name>bintray-plugins</name>
-                    <url>http://dl.bintray.com/arnauddegiuli/domosnap</url>
+                    <id>bintray-domosnap-domosnap-core</id>
+                    <name>domosnap-core-plugins</name>
+                    <url>https://dl.bintray.com/domosnap/domosnap-core</url>
                 </pluginRepository>
             </pluginRepositories>
-            <id>bintray</id>
+            <id>domosnap-core</id>
         </profile>
     </profiles>
     <activeProfiles>
-        <activeProfile>bintray</activeProfile>
+        <activeProfile>domosnap-core</activeProfile>
     </activeProfiles>
 </settings>
