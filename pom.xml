@@ -24,6 +24,7 @@
 		<licence.plugin.version>1.7</licence.plugin.version>
 		<file.encoding>UTF-8</file.encoding>
 		<engine.version>0.1.15</engine.version>
+		<apache.felix.framework>6.0.3</apache.felix.framework>
 	</properties>
 
 	<dependencyManagement>
@@ -46,8 +47,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.5.1</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>13</source>
+					<target>13</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
