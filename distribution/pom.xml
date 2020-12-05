@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>distribution</artifactId>
@@ -8,7 +9,7 @@
 	<parent>
 		<groupId>com.domosnap.simulationServer</groupId>
 		<artifactId>LegrandSimulationGatewayProject</artifactId>
-		<version>0.0.2</version>
+		<version>0.0.3</version>
 	</parent>
 
 	<!-- Dependecies Management -->
@@ -24,23 +25,23 @@
 	<!-- Build Configuration -->
 	<build>
 		<plugins>
-			      <plugin>
+			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
-				  <execution>
-				    <id>distro-assembly</id>
-				    <phase>package</phase>
-				    <goals>
-				      <goal>single</goal>
-				    </goals>
-				    <configuration>
-				      <descriptors>
-					<descriptor>src/assembly/distrib.xml</descriptor>
-				      </descriptors>
-				    </configuration>
-				  </execution>
+					<execution>
+						<id>distro-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/assembly/distrib.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
 				</executions>
-			      </plugin>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
