@@ -22,7 +22,7 @@
 				<include>com.domosnap.simulationServer.controllermodules:automation</include>
 				<include>com.domosnap.simulationServer.controllermodules:gateway</include>
 				<include>com.domosnap.simulationServer.controllermodules:heating</include>
-                                <include>com.domosnap.simulationServer:controllermodules</include>
+				<include>com.domosnap.simulationServer.controllermodules:commandmodules</include>
 			</includes>
 			<binaries>
 				<outputDirectory>bundle</outputDirectory>
@@ -39,7 +39,7 @@
 			</includes> </fileSet> -->
 		<fileSet>
 			<directory>felix-framework-6.0.3</directory>
-			<outputDirectory>/</outputDirectory>
+			<outputDirectory>./</outputDirectory>
 			<includes>
 				<include>**/*</include>
 			</includes>
