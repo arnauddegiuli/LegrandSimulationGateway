@@ -23,7 +23,7 @@
 	<properties>
 		<licence.plugin.version>1.7</licence.plugin.version>
 		<file.encoding>UTF-8</file.encoding>
-		<engine.version>0.1.15</engine.version>
+		<engine.version>0.1.19</engine.version>
 		<apache.felix.framework>6.0.3</apache.felix.framework>
 	</properties>
 
@@ -70,9 +70,8 @@
 
 	<repositories>
 		<repository>
-			<id>domosnap-core</id>
-			<name>domosnap-core</name>
-			<url>https://bintray.com/domosnap/domosnap-core</url>
+			<id>gitlab-maven</id>
+			<url>https://gitlab.com/api/v4/groups/6848729/-/packages/maven</url>
 		</repository>
 	</repositories>
 
