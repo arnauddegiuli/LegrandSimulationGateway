@@ -4,7 +4,7 @@ package com.domosnap.simulationServer.controllermodules.light;
  * #%L
  * DomoSnap Legrand Simulation Gateway LightModule
  * %%
- * Copyright (C) 2011 - 2020 A. de Giuli
+ * Copyright (C) 2011 - 2021 A. de Giuli
  * %%
  * This file is part of MyDomo done by A. de Giuli (arnaud.degiuli(at)free.fr).
  * 
