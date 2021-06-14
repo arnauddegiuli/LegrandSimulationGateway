@@ -22,6 +22,7 @@
 				<include>com.domosnap.simulationServer.controllermodules:automation</include>
 				<include>com.domosnap.simulationServer.controllermodules:gateway</include>
 				<include>com.domosnap.simulationServer.controllermodules:heating</include>
+				<include>com.domosnap.simulationServer.controllermodules:energy</include>
 				<include>com.domosnap.simulationServer.controllermodules:commandmodules</include>
 			</includes>
 			<binaries>

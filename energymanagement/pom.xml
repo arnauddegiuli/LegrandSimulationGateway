@@ -1,0 +1,122 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.domosnap.simulationServer.controllermodules</groupId>
+	<artifactId>energy</artifactId>
+	<packaging>bundle</packaging>
+	<name>DomoSnap Legrand Simulation Gateway Energy Management Module</name>
+	<description>DomoSnap virtual server pluggin energy management device</description>
+
+	<parent>
+		<groupId>com.domosnap.simulationServer</groupId>
+		<artifactId>LegrandSimulationGatewayProject</artifactId>
+		<version>0.0.3</version>
+	</parent>
+
+	<!-- Build Configuration -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>2.4.0</version>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+						<Bundle-Name>${project.name}</Bundle-Name>
+						<Bundle-Description>${project.description}</Bundle-Description>
+						<Bundle-Vendor>ADG Software</Bundle-Vendor>
+						<Bundle-Version>${project.version}</Bundle-Version>
+						<Bundle-Activator>com.domosnap.simulationServer.controllermodules.energy.EnergyModuleActivator</Bundle-Activator>
+						<Import-Package>com.domosnap.engine,
+							 com.domosnap.engine.adapter.impl.openwebnet,
+							 com.domosnap.engine.adapter.impl.openwebnet.conversion.counter,
+							 com.domosnap.engine.adapter.impl.openwebnet.conversion.counter.dimension,
+							 com.domosnap.engine.adapter.impl.openwebnet.conversion.core.parser,
+							 com.domosnap.simulationServer,
+							 com.domosnap.simulationServer.controllermodules,
+							 org.osgi.framework
+ 						</Import-Package>
+						<Export-Package>com.domosnap.simulationServer.controllermodules.energy</Export-Package>
+						<Require-Bundle>com.domosnap.engine</Require-Bundle>
+					</instructions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>${licence.plugin.version}</version>
+				<executions>
+					<execution>
+						<id>first</id>
+						<goals>
+							<goal>update-file-header</goal>
+						</goals>
+						<phase>process-sources</phase>
+						<configuration>
+							<licenseName>gpl</licenseName>
+							<licenseResolver>${project.baseUri}/src/license</licenseResolver>
+							<canUpdateCopyright>true</canUpdateCopyright>
+							<canUpdateDescription>true</canUpdateDescription>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>license-maven-plugin</artifactId>
+										<versionRange>[1.5,)</versionRange>
+										<goals>
+											<goal>
+												update-file-header
+											</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<!-- Dependecies Management -->
+	<dependencies>
+		<dependency>
+			<groupId>com.domosnap.core</groupId>
+			<artifactId>engine</artifactId>
+			<version>${engine.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.domosnap.simulationServer.controllermodules</groupId>
+			<artifactId>commandmodules</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.domosnap.simulationServer</groupId>
+			<artifactId>server</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.framework</artifactId>
+			<version>${apache.felix.framework}</version>
+		</dependency>
+	</dependencies>
+</project>

@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import com.domosnap.engine.Log;
 import com.domosnap.engine.Log.Session;
@@ -54,20 +55,24 @@ public class DimensionManager implements Map<String,List<DimensionValue>> {
 			p.load(f);
 			for (String key : p.stringPropertyNames()) {
 				List<DimensionValue> list = new ArrayList<DimensionValue>();
-				DimensionValue d = new DimensionValue() {
-					private String s;
-					@Override
-					public void setValue(String value) {
-						s = value;
-					}
-					
-					@Override
-					public String getValue() {
-						return s;
-					}
-				};
-				d.setValue(p.getProperty(key)); // Actually only manage dimension with one value!!! => need to update to add more than one value
-				list.add(d);
+				
+				for (StringTokenizer st = new StringTokenizer(p.getProperty(key), "*"); st.hasMoreElements(); ) {
+					String value = st.nextToken();
+					DimensionValue d = new DimensionValue() {
+						private String s;
+						@Override
+						public void setValue(String value) {
+							s = value;
+						}
+						
+						@Override
+						public String getValue() {
+							return s;
+						}
+					};
+					d.setValue(value);
+					list.add(d);
+				}
 				statusList.put(key, list);
 			} 			
 		} catch (FileNotFoundException e) {

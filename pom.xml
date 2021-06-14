@@ -16,6 +16,7 @@
 		<module>light</module>
 		<module>gateway</module>
 		<module>heating</module>
+		<module>energymanagement</module>
 		<module>automation</module>
 		<module>distribution</module>
 	</modules>
@@ -23,7 +24,7 @@
 	<properties>
 		<licence.plugin.version>1.7</licence.plugin.version>
 		<file.encoding>UTF-8</file.encoding>
-		<engine.version>0.1.19</engine.version>
+		<engine.version>0.1.20-SNAPSHOT</engine.version>
 		<apache.felix.framework>6.0.3</apache.felix.framework>
 	</properties>
 

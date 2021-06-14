@@ -1,8 +1,8 @@
-package com.domosnap.simulationServer.controllermodules.heating;
+package com.domosnap.simulationServer.controllermodules.energy;
 
 /*
  * #%L
- * DomoSnap Legrand Simulation Gateway HeatingModule
+ * DomoSnap Legrand Simulation Gateway Energy Management Module
  * %%
  * Copyright (C) 2011 - 2021 A. de Giuli
  * %%
@@ -34,25 +34,24 @@ import com.domosnap.simulationServer.ControllerStateManagement;
 import com.domosnap.simulationServer.controllermodules.DimensionManager;
 import com.domosnap.simulationServer.controllermodules.StatusManager;
 
-public class HeatingModuleActivator implements BundleActivator {
+public class EnergyModuleActivator implements BundleActivator {
 
-	private HeatingSimulator heatingModule;
+	private EnergySimulator energyModule;
 	
 	@Override
 	public void start(BundleContext context) throws Exception {
-		heatingModule = new HeatingSimulator(new StatusManager(context.getBundle().getResource("heatingstatus.properties").openConnection().getInputStream()), new DimensionManager(context.getBundle().getResource("heatingdimension.properties").openConnection().getInputStream()));
+		energyModule = new EnergySimulator(new StatusManager(context.getBundle().getResource("energystatus.properties").openConnection().getInputStream()), new DimensionManager(context.getBundle().getResource("energydimension.properties").openConnection().getInputStream()));
 		Dictionary<String, Object> dict = new Hashtable<String, Object>();
-		dict.put("osgi.command.scope", "heating");
-		dict.put("osgi.command.function", HeatingCommand.functions);
+		dict.put("osgi.command.scope", "energy");
+		dict.put("osgi.command.function", EnergyCommand.functions);
 
+		context.registerService(EnergyCommand.class.getName(), new EnergyCommand(), dict);
 		
-		context.registerService(HeatingCommand.class.getName(), new HeatingCommand(), dict);
-		
-		ControllerStateManagement.registerControllerCommand(heatingModule);
+		ControllerStateManagement.registerControllerCommand(energyModule);
 	}
 
 	@Override
 	public void stop(BundleContext arg0) throws Exception {
-		ControllerStateManagement.registerControllerCommand(heatingModule);
+		ControllerStateManagement.registerControllerCommand(energyModule);
 	}
 }
